@@ -2,8 +2,11 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>المدير الشامل للبرامج والبرمجة وتعاريف النظام والأوفيس — عبر Uptodown</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#030712">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>بوابة الويندوز — تطبيق</title>
 
 <!-- ===== CDN LIBRARIES ===== -->
 <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
@@ -15,27 +18,163 @@
 
 <style>
 /* =====================================================
-   CUSTOM DESIGN SYSTEM — Dark Glassmorphism v5.2 (Uptodown + Sidebar + Office)
+   MOBILE APP DESIGN SYSTEM — v6.0
 ===================================================== */
+:root{
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --app-height: 100vh;
+}
+*{ -webkit-tap-highlight-color: transparent; }
 html{ scroll-behavior:smooth; }
 body{
   font-family:'Cairo',ui-sans-serif,system-ui,sans-serif;
   background:
-    radial-gradient(1200px 600px at 85% -10%, rgba(217,70,239,.07), transparent 60%),
-    radial-gradient(1000px 500px at 10% 0%, rgba(6,182,212,.08), transparent 55%),
+    radial-gradient(800px 400px at 90% -10%, rgba(217,70,239,.10), transparent 60%),
+    radial-gradient(700px 350px at 5% 0%, rgba(6,182,212,.10), transparent 55%),
     linear-gradient(180deg,#030712 0%, #040817 55%, #030712 100%);
   color:#e2e8f0;
-  min-height:100vh;
-  overflow-x:hidden;
+  min-height:var(--app-height);
+  overflow:hidden;
+  overscroll-behavior:none;
+  -webkit-font-smoothing:antialiased;
 }
 .mono{ font-family:'JetBrains Mono',ui-monospace,monospace; }
 ::selection{ background:rgba(6,182,212,.35); color:#fff; }
-::-webkit-scrollbar{ width:9px; height:9px; }
-::-webkit-scrollbar-track{ background:#060a16; }
-::-webkit-scrollbar-thumb{ background:linear-gradient(#155e75,#0f172a); border-radius:99px; border:2px solid #060a16; }
+::-webkit-scrollbar{ width:0; height:0; }
+.no-scrollbar::-webkit-scrollbar{ display:none; }
 
+/* ===== APP SHELL ===== */
+#app-shell{
+  position:fixed; inset:0;
+  display:flex; flex-direction:column;
+  max-width:520px; margin:0 auto;
+  background:transparent;
+  isolation:isolate;
+}
 #bg-canvas{ position:fixed; inset:0; z-index:0; pointer-events:none; }
 
+/* ===== TOP APP BAR ===== */
+#app-bar{
+  flex-shrink:0;
+  padding-top:calc(var(--safe-top) + 10px);
+  padding-bottom:10px;
+  padding-left:16px; padding-right:16px;
+  background:rgba(3,7,18,.78);
+  -webkit-backdrop-filter:blur(18px); backdrop-filter:blur(18px);
+  border-bottom:1px solid rgba(255,255,255,.06);
+  z-index:30;
+  transition:transform .3s ease;
+}
+.app-bar-inner{
+  display:flex; align-items:center; gap:12px;
+}
+.app-logo{
+  width:38px; height:38px; border-radius:12px;
+  background:linear-gradient(135deg, rgba(6,182,212,.3), rgba(37,99,235,.3));
+  border:1px solid rgba(6,182,212,.45);
+  display:flex; align-items:center; justify-content:center;
+  color:#67e8f9; font-size:16px; flex-shrink:0;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.1), 0 6px 18px -6px rgba(6,182,212,.5);
+}
+.app-title{
+  font-size:15px; font-weight:900; color:#fff; line-height:1.1;
+}
+.app-subtitle{
+  font-size:10px; color:#64748b; font-weight:700;
+  font-family:'JetBrains Mono',monospace;
+}
+.app-actions{
+  margin-inline-start:auto; display:flex; align-items:center; gap:6px;
+}
+.app-icon-btn{
+  width:36px; height:36px; border-radius:10px;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.08);
+  color:#94a3b8; display:flex; align-items:center; justify-content:center;
+  font-size:14px; cursor:pointer;
+  transition:all .2s;
+}
+.app-icon-btn:active{ transform:scale(.92); background:rgba(6,182,212,.15); color:#67e8f9; }
+.app-icon-btn .badge{
+  position:absolute; top:-3px; right:-3px;
+  min-width:16px; height:16px; padding:0 4px;
+  background:#f43f5e; color:#fff;
+  border-radius:99px; font-size:9px; font-weight:800;
+  display:flex; align-items:center; justify-content:center;
+  border:2px solid #030712;
+}
+
+/* ===== VIEWS CONTAINER ===== */
+#views-wrap{
+  flex:1;
+  position:relative;
+  overflow:hidden;
+  z-index:10;
+}
+.view{
+  position:absolute; inset:0;
+  overflow-y:auto;
+  overflow-x:hidden;
+  padding:16px 16px calc(90px + var(--safe-bottom));
+  opacity:0; visibility:hidden;
+  transform:translateY(8px);
+  transition:opacity .3s ease, transform .3s ease, visibility .3s;
+  -webkit-overflow-scrolling:touch;
+}
+.view.active{ opacity:1; visibility:visible; transform:translateY(0); }
+
+/* ===== BOTTOM NAVIGATION ===== */
+#bottom-nav{
+  flex-shrink:0;
+  position:relative;
+  background:rgba(3,7,18,.9);
+  -webkit-backdrop-filter:blur(20px); backdrop-filter:blur(20px);
+  border-top:1px solid rgba(255,255,255,.08);
+  padding:8px 8px calc(8px + var(--safe-bottom));
+  display:flex; align-items:center; justify-content:space-around;
+  z-index:30;
+  box-shadow:0 -8px 30px rgba(0,0,0,.5);
+}
+.nav-item{
+  flex:1;
+  display:flex; flex-direction:column; align-items:center; gap:3px;
+  padding:6px 4px;
+  border-radius:12px;
+  border:none; background:transparent; cursor:pointer;
+  color:#64748b;
+  font-size:10px; font-weight:800;
+  transition:all .25s ease;
+  position:relative;
+}
+.nav-item i{
+  font-size:18px; transition:all .25s ease;
+}
+.nav-item.active{
+  color:#67e8f9;
+}
+.nav-item.active i{
+  transform:translateY(-2px) scale(1.1);
+  filter:drop-shadow(0 0 8px rgba(103,232,249,.6));
+}
+.nav-item.active::before{
+  content:'';
+  position:absolute; top:-1px; left:50%; transform:translateX(-50%);
+  width:28px; height:3px; border-radius:0 0 4px 4px;
+  background:linear-gradient(90deg,#06b6d4,#3b82f6);
+  box-shadow:0 0 12px rgba(6,182,212,.7);
+}
+.nav-item:active{ transform:scale(.95); }
+.nav-item .nav-badge{
+  position:absolute; top:2px; right:calc(50% - 18px);
+  min-width:16px; height:16px; padding:0 4px;
+  background:#f43f5e; color:#fff;
+  border-radius:99px; font-size:9px; font-weight:800;
+  display:flex; align-items:center; justify-content:center;
+  border:2px solid #030712;
+}
+
+/* ===== GLASS CARDS ===== */
 .glass-panel,.glass-card{
   background:rgba(15,23,42,.72);
   -webkit-backdrop-filter:blur(16px); backdrop-filter:blur(16px);
@@ -43,1008 +182,930 @@ body{
   box-shadow:0 20px 50px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.06);
 }
 
-/* ===== القائمة الجانبية (RTL — يمين الشاشة) ===== */
-#sidebar{
-  transition:transform .45s cubic-bezier(.2,.8,.2,1);
-  transform:translateX(110%);
+/* ===== APP CARDS (قائمة عمودية) ===== */
+.app-card{
+  display:flex; align-items:center; gap:12px;
+  padding:12px 14px;
+  border-radius:16px;
+  background:rgba(15,23,42,.72);
+  border:1px solid rgba(255,255,255,.08);
+  transition:all .25s ease;
+  cursor:pointer;
+  position:relative;
+  overflow:hidden;
 }
-@media (min-width:1024px){ #sidebar{ transform:translateX(0)!important; } }
-#sidebar.open{ transform:translateX(0); }
-.side-link{ transition:all .25s ease; }
-.side-link:hover{ background:rgba(6,182,212,.1); border-color:rgba(6,182,212,.4); color:#fff; transform:translateX(-2px); }
-.side-link.active{
-  background:linear-gradient(120deg, rgba(6,182,212,.2), rgba(37,99,235,.14));
-  border-color:rgba(6,182,212,.55); color:#fff;
+.app-card:active{ transform:scale(.98); border-color:rgba(6,182,212,.4); }
+.app-card.selected{
+  background:linear-gradient(135deg, rgba(6,182,212,.14), rgba(15,23,42,.78) 60%);
+  border-color:rgba(6,182,212,.55);
+  box-shadow:0 8px 24px -10px rgba(6,182,212,.5);
 }
-
-/* ===== بطاقات البرامج ===== */
-.pkg-card{
-  transition:transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .3s, border-color .3s, background .3s;
-  transform-style:preserve-3d; will-change:transform;
+.app-icon{
+  width:44px; height:44px; border-radius:12px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:20px; flex-shrink:0;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.08);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.06);
 }
-.pkg-card::after{
-  content:''; position:absolute; inset:-40%;
-  background:linear-gradient(115deg, transparent 42%, rgba(255,255,255,.09) 50%, transparent 58%);
-  transform:translateX(90%) skewX(-12deg);
-  transition:transform .9s ease; pointer-events:none;
+.app-info{ flex:1; min-width:0; }
+.app-name{
+  font-size:13.5px; font-weight:800; color:#fff;
+  line-height:1.2; margin-bottom:3px;
+  display:flex; align-items:center; gap:6px; flex-wrap:wrap;
 }
-.pkg-card:hover::after{ transform:translateX(-90%) skewX(-12deg); }
-.card-idle{ border-color:rgba(255,255,255,.08)!important; }
-.card-idle:hover{ border-color:rgba(103,232,249,.38)!important; }
-.card-selected{
-  border-color:rgba(6,182,212,.65)!important;
-  background:linear-gradient(160deg, rgba(6,182,212,.14), rgba(15,23,42,.78) 48%)!important;
-  box-shadow:0 16px 42px -14px rgba(6,182,212,.45), inset 0 1px 0 rgba(255,255,255,.07)!important;
+.app-desc{
+  font-size:11px; color:#94a3b8; font-weight:600;
+  line-height:1.35;
+  overflow:hidden; text-overflow:ellipsis; display:-webkit-box;
+  -webkit-line-clamp:1; -webkit-box-orient:vertical;
 }
-@keyframes goldPulse{
-  0%{ box-shadow:0 0 0 0 rgba(251,191,36,.55); }
-  100%{ box-shadow:0 0 0 24px rgba(251,191,36,0); }
-}
-.pkg-card.downloading{ animation:goldPulse .5s ease-out 3; border-color:rgba(251,191,36,.9)!important; }
-@keyframes cardIn{
-  from{ opacity:0; transform:translateY(16px) scale(.96); }
-  to{ opacity:1; transform:none; }
-}
-.anim-card{ animation:cardIn .45s cubic-bezier(.2,.8,.2,1) backwards; }
-
-.pkg-badge{
-  font-size:10px; font-weight:800; padding:2px 9px; border-radius:999px;
-  color:#fde68a; background:rgba(251,191,36,.12); border:1px solid rgba(251,191,36,.38);
-  white-space:nowrap;
-}
-.src-chip{
-  font-size:9px; font-weight:800; letter-spacing:.05em; padding:2px 8px; border-radius:6px;
-  display:inline-flex; align-items:center; gap:4px; white-space:nowrap;
-}
-.src-uptodown{ color:#a5f3fc; background:rgba(6,182,212,.12); border:1px solid rgba(6,182,212,.35); }
-.src-official{ color:#ddd6fe; background:rgba(139,92,246,.12); border:1px solid rgba(139,92,246,.35); }
-.icon-glow{ box-shadow:inset 0 1px 0 rgba(255,255,255,.08), 0 8px 22px -8px rgba(0,0,0,.7); }
-
-/* ===== رقائق قسم الأوفيس ===== */
-.office-chip{ transition:all .25s ease; }
-.office-chip:hover{ border-color:rgba(6,182,212,.5)!important; background:rgba(6,182,212,.08); transform:translateY(-2px); }
-
-/* ===== تبويبات التصنيف ===== */
-.cat-tab{ transition:all .25s ease; border:1px solid rgba(255,255,255,.1); background:rgba(255,255,255,.03); }
-.cat-tab:hover{ border-color:rgba(6,182,212,.5); color:#fff; transform:translateY(-2px); }
-.cat-active{
-  background:linear-gradient(120deg,#06b6d4,#2563eb)!important;
-  border-color:transparent!important; color:#fff!important;
-  box-shadow:0 10px 28px -8px rgba(6,182,212,.55);
-}
-
-/* ===== أزرار ===== */
-.btn-gradient{
-  position:relative; overflow:hidden;
-  background:linear-gradient(115deg,#0891b2,#2563eb 45%,#4f46e5);
-  transition:transform .25s ease, box-shadow .3s ease, filter .3s;
-  box-shadow:0 18px 42px -12px rgba(37,99,235,.55);
-}
-.btn-gradient:hover{ transform:translateY(-3px) scale(1.01); filter:brightness(1.12); }
-.btn-gradient:active{ transform:scale(.97); }
-.btn-gradient::before{
-  content:''; position:absolute; inset:0;
-  background:linear-gradient(115deg, transparent 35%, rgba(255,255,255,.22) 50%, transparent 65%);
-  transform:translateX(120%); transition:transform .8s ease;
-}
-.btn-gradient:hover::before{ transform:translateX(-120%); }
-.btn-ghost{
-  border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.04);
+.app-check{
+  width:26px; height:26px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:15px; flex-shrink:0;
   transition:all .25s ease;
 }
-.btn-ghost:hover{ border-color:rgba(6,182,212,.55); background:rgba(6,182,212,.1); transform:translateY(-2px); }
-.btn-ghost:active{ transform:scale(.97); }
+.app-check.on{ color:#67e8f9; }
+.app-check.off{ color:#475569; }
 
-/* ===== قائمة التحميل ===== */
-.q-row{ transition:all .25s ease; }
-.q-row:hover{ border-color:rgba(6,182,212,.4)!important; }
-.term{ background:rgba(2,6,23,.85); border:1px solid rgba(255,255,255,.08); }
-.term-scroll::-webkit-scrollbar{ width:6px; }
-
-.step-chip{
-  font-size:10px; font-weight:700; letter-spacing:.22em;
-  padding:3px 10px; border-radius:999px;
-  color:#67e8f9; background:rgba(6,182,212,.1); border:1px solid rgba(6,182,212,.35);
+/* ===== CHIP BADGES ===== */
+.chip{
+  display:inline-flex; align-items:center; gap:3px;
+  font-size:9px; font-weight:800; padding:2px 7px;
+  border-radius:6px; letter-spacing:.03em;
+  white-space:nowrap;
 }
-.step-chip-new{
-  font-size:10px; font-weight:700; letter-spacing:.14em;
-  padding:3px 10px; border-radius:999px;
-  color:#fcd34d; background:rgba(251,191,36,.12); border:1px solid rgba(251,191,36,.4);
+.chip-amber{ color:#fcd34d; background:rgba(251,191,36,.12); border:1px solid rgba(251,191,36,.35); }
+.chip-cyan{ color:#a5f3fc; background:rgba(6,182,212,.12); border:1px solid rgba(6,182,212,.35); }
+.chip-violet{ color:#ddd6fe; background:rgba(139,92,246,.12); border:1px solid rgba(139,92,246,.35); }
+.chip-green{ color:#86efac; background:rgba(16,185,129,.12); border:1px solid rgba(16,185,129,.35); }
+
+/* ===== SECTION HEADERS ===== */
+.section-head{
+  display:flex; align-items:center; gap:8px;
+  margin:20px 0 12px;
+}
+.section-head h2{
+  font-size:14px; font-weight:900; color:#fff;
+}
+.section-head .line{
+  flex:1; height:1px;
+  background:linear-gradient(to left, rgba(255,255,255,.1), transparent);
+}
+.step-tag{
+  font-size:9px; font-weight:800; letter-spacing:.2em;
+  padding:2px 8px; border-radius:99px;
+  color:#67e8f9; background:rgba(6,182,212,.1);
+  border:1px solid rgba(6,182,212,.35);
+}
+.step-tag.amber{
+  color:#fcd34d; background:rgba(251,191,36,.12);
+  border-color:rgba(251,191,36,.4);
 }
 
-#toast{ transition:all .5s cubic-bezier(.2,.8,.2,1); }
+/* ===== BUTTONS ===== */
+.btn-primary{
+  position:relative; overflow:hidden;
+  background:linear-gradient(115deg,#0891b2,#2563eb 45%,#4f46e5);
+  border:none; border-radius:14px;
+  padding:14px 20px;
+  color:#fff; font-weight:900; font-size:14px;
+  display:flex; align-items:center; justify-content:center; gap:8px;
+  cursor:pointer;
+  box-shadow:0 12px 32px -10px rgba(37,99,235,.6);
+  transition:transform .2s ease, filter .2s;
+  width:100%;
+}
+.btn-primary:active{ transform:scale(.97); filter:brightness(.95); }
+.btn-secondary{
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:12px;
+  padding:11px 16px;
+  color:#e2e8f0; font-weight:800; font-size:13px;
+  display:flex; align-items:center; justify-content:center; gap:6px;
+  cursor:pointer;
+  transition:all .2s;
+  width:100%;
+}
+.btn-secondary:active{ transform:scale(.97); background:rgba(6,182,212,.12); }
 
+/* ===== CHIPS FILTER SCROLL ===== */
+.chip-scroll{
+  display:flex; gap:8px;
+  overflow-x:auto;
+  padding:4px 0 8px;
+  margin:0 -16px; padding-inline:16px;
+  scroll-snap-type:x mandatory;
+}
+.chip-scroll::-webkit-scrollbar{ display:none; }
+.filter-chip{
+  flex-shrink:0;
+  padding:8px 14px;
+  border-radius:99px;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.1);
+  color:#94a3b8;
+  font-size:12px; font-weight:800;
+  display:flex; align-items:center; gap:6px;
+  cursor:pointer;
+  transition:all .25s ease;
+  scroll-snap-align:start;
+  white-space:nowrap;
+}
+.filter-chip:active{ transform:scale(.95); }
+.filter-chip.active{
+  background:linear-gradient(120deg,#06b6d4,#2563eb);
+  border-color:transparent; color:#fff;
+  box-shadow:0 6px 20px -6px rgba(6,182,212,.6);
+}
+.filter-chip .count{
+  font-size:10px; opacity:.7;
+  font-family:'JetBrains Mono',monospace;
+}
+
+/* ===== SEARCH BAR ===== */
+.search-bar{
+  position:relative;
+  margin-bottom:12px;
+}
+.search-bar i{
+  position:absolute; top:50%; right:14px;
+  transform:translateY(-50%);
+  color:#475569; font-size:14px;
+  pointer-events:none;
+}
+.search-bar input{
+  width:100%;
+  padding:11px 40px 11px 14px;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:12px;
+  color:#fff;
+  font-size:13px;
+  font-weight:600;
+  outline:none;
+  transition:all .25s;
+}
+.search-bar input:focus{
+  border-color:rgba(6,182,212,.6);
+  background:rgba(6,182,212,.06);
+}
+.search-bar input::placeholder{ color:#475569; }
+
+/* ===== STAT CARDS ===== */
+.stat-grid{
+  display:grid; grid-template-columns:repeat(2,1fr);
+  gap:10px;
+}
+.stat-box{
+  padding:12px;
+  border-radius:14px;
+  border:1px solid;
+  display:flex; align-items:center; gap:10px;
+}
+.stat-icon{
+  width:36px; height:36px; border-radius:10px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:15px; flex-shrink:0;
+}
+.stat-val{
+  font-size:16px; font-weight:900; color:#fff;
+  font-family:'JetBrains Mono',monospace;
+  line-height:1;
+}
+.stat-lbl{
+  font-size:9.5px; color:#94a3b8; font-weight:800;
+  margin-top:2px;
+}
+
+/* ===== TERMINAL LOG ===== */
+.term{
+  background:rgba(2,6,23,.85);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:12px;
+  padding:12px;
+  max-height:140px;
+  overflow-y:auto;
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;
+  line-height:1.6;
+  text-align:left;
+  direction:ltr;
+  white-space:pre-wrap;
+}
+
+/* ===== TOAST ===== */
+#toast{
+  position:fixed;
+  top:calc(var(--safe-top) + 70px);
+  left:50%; transform:translateX(-50%) translateY(-20px);
+  z-index:100;
+  opacity:0; pointer-events:none;
+  transition:all .35s cubic-bezier(.2,.8,.2,1);
+  max-width:calc(100% - 32px);
+  width:max-content;
+}
+#toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+#toast .toast-body{
+  display:flex; align-items:center; gap:10px;
+  padding:12px 16px;
+  background:rgba(15,23,42,.95);
+  -webkit-backdrop-filter:blur(20px); backdrop-filter:blur(20px);
+  border:1px solid rgba(6,182,212,.4);
+  border-radius:14px;
+  box-shadow:0 16px 40px -10px rgba(0,0,0,.7);
+  font-size:12.5px; font-weight:800; color:#fff;
+}
+
+/* ===== FAB (زر عائم) ===== */
+#fab{
+  position:fixed;
+  bottom:calc(80px + var(--safe-bottom) + 16px);
+  left:50%; transform:translateX(-50%);
+  z-index:25;
+  display:none;
+}
+#fab.show{ display:block; }
+#fab button{
+  display:flex; align-items:center; gap:10px;
+  padding:12px 20px;
+  border-radius:99px;
+  background:linear-gradient(115deg,#0891b2,#2563eb 55%,#4f46e5);
+  border:none;
+  color:#fff; font-weight:900; font-size:13px;
+  box-shadow:0 12px 32px -6px rgba(6,182,212,.7), 0 0 0 1px rgba(255,255,255,.1);
+  cursor:pointer;
+  transition:transform .2s;
+  animation:fabIn .4s cubic-bezier(.2,.8,.2,1);
+}
+#fab button:active{ transform:scale(.94); }
+@keyframes fabIn{
+  from{ opacity:0; transform:translateY(20px) scale(.8); }
+  to{ opacity:1; transform:translateY(0) scale(1); }
+}
+
+/* ===== EMPTY STATE ===== */
+.empty-state{
+  text-align:center;
+  padding:40px 20px;
+  color:#64748b;
+}
+.empty-state i{
+  font-size:36px;
+  margin-bottom:10px;
+  opacity:.5;
+}
+.empty-state p{
+  font-size:12.5px; font-weight:700;
+}
+
+/* ===== LOADING / SKELETON ===== */
+@keyframes shimmer{
+  0%{ background-position:-200% 0; }
+  100%{ background-position:200% 0; }
+}
+
+/* ===== REDUCED MOTION ===== */
 @media (prefers-reduced-motion: reduce){
   *{ animation-duration:.01ms!important; transition-duration:.01ms!important; }
+}
+
+/* ===== DESKTOP MOCKUP (للشاشات الكبيرة) ===== */
+@media (min-width: 640px){
+  body{ padding:20px; }
+  #app-shell{
+    position:relative;
+    height:calc(100vh - 40px);
+    border-radius:32px;
+    border:1px solid rgba(255,255,255,.08);
+    box-shadow:0 40px 100px -20px rgba(0,0,0,.8);
+    overflow:hidden;
+  }
+  #bg-canvas{ border-radius:32px; }
 }
 </style>
 </head>
 
-<body class="relative">
+<body>
 
+<!-- ===== BACKGROUND CANVAS ===== -->
 <canvas id="bg-canvas" aria-hidden="true"></canvas>
-<div class="fixed top-[-120px] start-[-120px] w-[420px] h-[420px] rounded-full bg-cyan-600/10 blur-[140px] pointer-events-none z-0"></div>
-<div class="fixed bottom-[-160px] end-[-100px] w-[460px] h-[460px] rounded-full bg-fuchsia-600/10 blur-[150px] pointer-events-none z-0"></div>
 
-<!-- =====================================================
-     القائمة الجانبية (Sidebar) — ثابتة يمين الشاشة
-====================================================== -->
-<aside id="sidebar" class="fixed top-0 right-0 h-screen w-64 z-40 glass-panel !rounded-none border-0 border-s border-white/10 flex flex-col">
-  <!-- شعار -->
-  <div class="p-5 border-b border-white/10 flex items-center gap-3">
-    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500/25 to-blue-600/25 border border-cyan-400/40 flex items-center justify-center text-cyan-300 icon-glow shrink-0">
-      <i class="fa-solid fa-cube"></i>
-    </div>
-    <div class="min-w-0">
-      <p class="font-black text-white text-sm leading-tight">بوابة الويندوز</p>
-      <p class="mono text-[10px] text-slate-500">v5.2 — Uptodown</p>
-    </div>
-  </div>
+<!-- ===== APP SHELL ===== -->
+<div id="app-shell">
 
-  <!-- روابط التنقل -->
-  <nav class="flex-1 overflow-y-auto term-scroll p-4 space-y-1.5" id="side-nav">
-    <p class="text-[10px] font-bold text-slate-500 tracking-widest mb-2 px-2">التنقل السريع</p>
-    <button type="button" class="side-link active w-full flex items-center gap-3 px-4 py-3 rounded-xl border border-transparent text-sm font-bold text-slate-300 cursor-pointer text-start" data-target="top">
-      <i class="fa-solid fa-house text-cyan-300 w-4"></i>الرئيسية
-    </button>
-    <button type="button" class="side-link w-full flex items-center gap-3 px-4 py-3 rounded-xl border border-transparent text-sm font-bold text-slate-300 cursor-pointer text-start" data-target="filters">
-      <i class="fa-solid fa-filter text-violet-300 w-4"></i>التصنيفات والبحث
-    </button>
-    <button type="button" class="side-link w-full flex items-center gap-3 px-4 py-3 rounded-xl border border-transparent text-sm font-bold text-slate-300 cursor-pointer text-start" data-target="apps">
-      <i class="fa-solid fa-grip text-emerald-300 w-4"></i>شبكة البرامج
-      <span class="mono text-[9px] ms-auto text-slate-500">48</span>
-    </button>
-    <button type="button" class="side-link w-full flex items-center gap-3 px-4 py-3 rounded-xl border border-transparent text-sm font-bold text-slate-300 cursor-pointer text-start" data-target="office">
-      <i class="fa-brands fa-microsoft text-blue-300 w-4"></i>حزم الأوفيس
-      <span class="mono text-[9px] ms-auto px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-300 border border-blue-400/30">جديد</span>
-    </button>
-    <button type="button" class="side-link w-full flex items-center gap-3 px-4 py-3 rounded-xl border border-transparent text-sm font-bold text-slate-300 cursor-pointer text-start" data-target="downloads">
-      <i class="fa-solid fa-cloud-arrow-down text-fuchsia-300 w-4"></i>مركز التحميل
-    </button>
-    <button type="button" class="side-link w-full flex items-center gap-3 px-4 py-3 rounded-xl border border-transparent text-sm font-bold text-slate-300 cursor-pointer text-start" data-target="developer">
-      <i class="fa-solid fa-user-tie text-amber-300 w-4"></i>المطوّر والتواصل
-    </button>
-
-    <p class="text-[10px] font-bold text-slate-500 tracking-widest mb-2 px-2 pt-4">أقسام سريعة</p>
-    <button type="button" class="side-link side-cat w-full flex items-center gap-3 px-4 py-2.5 rounded-xl border border-transparent text-[12.5px] font-bold text-slate-400 cursor-pointer text-start" data-cat="general">
-      <i class="fa-solid fa-box-open text-amber-300 w-4"></i>البرامج الأساسية
-    </button>
-    <button type="button" class="side-link side-cat w-full flex items-center gap-3 px-4 py-2.5 rounded-xl border border-transparent text-[12.5px] font-bold text-slate-400 cursor-pointer text-start" data-cat="dev">
-      <i class="fa-solid fa-code text-blue-300 w-4"></i>البرمجة
-    </button>
-    <button type="button" class="side-link side-cat w-full flex items-center gap-3 px-4 py-2.5 rounded-xl border border-transparent text-[12.5px] font-bold text-slate-400 cursor-pointer text-start" data-cat="python">
-      <i class="fa-brands fa-python text-yellow-300 w-4"></i>بايثون
-    </button>
-    <button type="button" class="side-link side-cat w-full flex items-center gap-3 px-4 py-2.5 rounded-xl border border-transparent text-[12.5px] font-bold text-slate-400 cursor-pointer text-start" data-cat="drivers">
-      <i class="fa-solid fa-microchip text-rose-300 w-4"></i>التعاريف
-    </button>
-    <button type="button" class="side-link side-cat w-full flex items-center gap-3 px-4 py-2.5 rounded-xl border border-transparent text-[12.5px] font-bold text-slate-400 cursor-pointer text-start" data-cat="office">
-      <i class="fa-brands fa-microsoft text-cyan-300 w-4"></i>الأوفيس
-    </button>
-  </nav>
-
-  <!-- إحصائيات مصغرة + أدوات -->
-  <div class="p-4 border-t border-white/10 space-y-3">
-    <div class="grid grid-cols-2 gap-2">
-      <div class="rounded-xl border border-cyan-400/20 bg-cyan-400/[0.06] px-3 py-2 text-center">
-        <p class="text-[9px] text-slate-400 font-bold">في القائمة</p>
-        <p id="side-selected" class="mono text-sm font-semibold text-cyan-300">48</p>
+  <!-- ===== TOP APP BAR ===== -->
+  <header id="app-bar">
+    <div class="app-bar-inner">
+      <div class="app-logo">
+        <i class="fa-solid fa-cube"></i>
       </div>
-      <div class="rounded-xl border border-emerald-400/20 bg-emerald-400/[0.06] px-3 py-2 text-center">
-        <p class="text-[9px] text-slate-400 font-bold">فُتحت</p>
-        <p id="side-opened" class="mono text-sm font-semibold text-emerald-300">0</p>
+      <div>
+        <p class="app-title">بوابة الويندوز</p>
+        <p class="app-subtitle">v6.0 — Uptodown</p>
       </div>
-    </div>
-    <div class="grid grid-cols-2 gap-2">
-      <button type="button" onclick="selectAllApps(true)" class="btn-ghost rounded-lg px-2 py-2 text-[10.5px] font-bold text-emerald-300 flex items-center justify-center gap-1.5 cursor-pointer">
-        <i class="fa-solid fa-check-double"></i>الكل
-      </button>
-      <button type="button" onclick="selectAllApps(false)" class="btn-ghost rounded-lg px-2 py-2 text-[10.5px] font-bold text-rose-400 flex items-center justify-center gap-1.5 cursor-pointer">
-        <i class="fa-solid fa-xmark"></i>تفريغ
-      </button>
-    </div>
-    <p class="text-center text-[9.5px] text-slate-500 font-bold pt-1">تطوير <span class="text-cyan-300 font-black">محمد صلاح</span> &bull; العراق — البصرة</p>
-  </div>
-</aside>
-
-<!-- زر فتح القائمة الجانبية (موبايل) -->
-<button type="button" id="side-toggle" class="lg:hidden fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full btn-gradient text-white text-xl flex items-center justify-center cursor-pointer">
-  <i class="fa-solid fa-bars" id="side-toggle-icon"></i>
-</button>
-<div id="side-overlay" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-30 hidden lg:hidden"></div>
-
-<!-- =====================================================
-     المحتوى الرئيسي
-====================================================== -->
-<div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 pb-16 lg:pr-4" id="main-wrap">
-
-  <!-- ===== HEADER ===== -->
-  <header class="pt-10 sm:pt-14" id="top">
-    <div class="glass-panel rounded-3xl p-6 sm:p-10 text-center relative overflow-hidden">
-      <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-l from-transparent via-cyan-400/60 to-transparent"></div>
-
-      <div class="inline-flex items-center gap-2.5 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-4 py-1.5 mb-6">
-        <span class="relative flex h-2 w-2">
-          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-300 opacity-75"></span>
-          <span class="relative inline-flex rounded-full h-2 w-2 bg-cyan-300"></span>
-        </span>
-        <span class="text-xs sm:text-sm font-bold text-cyan-200 flex items-center gap-1.5">
-          <i class="fa-solid fa-store"></i>
-          التحميل عبر Uptodown &bull; متجر موثوق ومفحوص &bull; الآن مع حزم أوفيس كاملة
-        </span>
-      </div>
-
-      <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black leading-[1.25] bg-gradient-to-r from-white via-cyan-200 to-fuchsia-400 bg-clip-text text-transparent pb-2">
-        المدير الشامل للبرامج والبرمجة<br class="hidden sm:block"> وتعاريف النظام والأوفيس
-      </h1>
-
-      <p class="mt-5 text-slate-400 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
-        اختر برامجك من <span class="text-cyan-300 font-bold">48 حزمة</span> وحمّلها عبر متجر
-        <span class="text-white font-bold">Uptodown</span> الشهير — ملفات مفحوصة ضد الفيروسات، إصدارات أرشيفية متاحة،
-        <span class="text-cyan-300 font-bold">بلا سكربتات ولا وسطاء</span>.
-      </p>
-
-      <!-- الإحصائيات -->
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-9">
-        <div class="glass-card rounded-2xl px-5 py-4 flex items-center gap-4 text-start">
-          <div class="w-11 h-11 rounded-xl bg-cyan-400/10 border border-cyan-400/30 flex items-center justify-center text-cyan-300 text-lg icon-glow">
-            <i class="fa-solid fa-square-check"></i>
-          </div>
-          <div>
-            <p class="text-[11px] text-slate-400 font-bold">البرامج المحددة</p>
-            <p id="stat-selected" class="mono text-xl font-semibold text-white">48 / 48</p>
-          </div>
-        </div>
-        <div class="glass-card rounded-2xl px-5 py-4 flex items-center gap-4 text-start">
-          <div class="w-11 h-11 rounded-xl bg-emerald-400/10 border border-emerald-400/30 flex items-center justify-center text-emerald-300 text-lg icon-glow">
-            <i class="fa-solid fa-cloud-arrow-down"></i>
-          </div>
-          <div>
-            <p class="text-[11px] text-slate-400 font-bold">فُتحت صفحات تحميلها</p>
-            <p id="stat-downloaded" class="mono text-xl font-semibold text-white">0</p>
-          </div>
-        </div>
-        <div class="glass-card rounded-2xl px-5 py-4 flex items-center gap-4 text-start">
-          <div class="w-11 h-11 rounded-xl bg-violet-400/10 border border-violet-400/30 flex items-center justify-center text-violet-300 text-lg icon-glow">
-            <i class="fa-solid fa-store"></i>
-          </div>
-          <div>
-            <p class="text-[11px] text-slate-400 font-bold">مصدر التحميل</p>
-            <p class="text-lg font-extrabold text-violet-300">Uptodown</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- شريط الأدوات -->
-      <div class="flex flex-wrap items-center justify-center gap-3 mt-8">
-        <button type="button" onclick="toggle3DWireframe()" class="btn-ghost rounded-xl px-4 py-2.5 text-sm font-bold text-slate-200 flex items-center gap-2 cursor-pointer">
-          <i class="fa-solid fa-wand-magic-sparkles text-fuchsia-300"></i>
-          تغيير شكل النواة 3D
+      <div class="app-actions">
+        <button type="button" class="app-icon-btn" id="btn-info" title="معلومات">
+          <i class="fa-solid fa-circle-info"></i>
         </button>
-        <button type="button" onclick="selectAllApps(true)" class="btn-ghost rounded-xl px-4 py-2.5 text-sm font-bold text-slate-200 flex items-center gap-2 cursor-pointer">
-          <i class="fa-solid fa-check-double text-emerald-300"></i>
-          تحديد الكل
-        </button>
-        <button type="button" onclick="selectAllApps(false)" class="btn-ghost rounded-xl px-4 py-2.5 text-sm font-bold text-slate-200 flex items-center gap-2 cursor-pointer">
-          <i class="fa-solid fa-xmark text-rose-400"></i>
-          إلغاء تحديد الكل
+        <button type="button" class="app-icon-btn relative" id="btn-queue" title="قائمة التحميل">
+          <i class="fa-solid fa-cloud-arrow-down"></i>
+          <span class="badge" id="queue-badge">48</span>
         </button>
       </div>
     </div>
   </header>
 
-  <!-- ===== الفلاتر والبحث — STEP 1 ===== -->
-  <section class="mt-12" id="filters">
-    <div class="flex items-center gap-3 mb-5">
-      <span class="step-chip mono">STEP 01</span>
-      <h2 class="text-lg sm:text-xl font-extrabold text-white">التصنيفات والبحث</h2>
-      <div class="flex-1 h-px bg-gradient-to-l from-white/10 to-transparent"></div>
-    </div>
+  <!-- ===== VIEWS ===== -->
+  <div id="views-wrap">
 
-    <div class="glass-panel rounded-2xl p-4 sm:p-5 flex flex-col lg:flex-row items-stretch lg:items-center gap-4">
-      <div class="flex flex-wrap items-center gap-2" id="cat-tabs">
-        <button type="button" class="cat-tab cat-active rounded-xl px-4 py-2.5 text-sm font-bold text-slate-300 cursor-pointer" data-cat="all">الكل <span class="mono text-[10px] opacity-70">48</span></button>
-        <button type="button" class="cat-tab rounded-xl px-4 py-2.5 text-sm font-bold text-slate-300 cursor-pointer" data-cat="general">البرامج الأساسية <span class="mono text-[10px] opacity-70">12</span></button>
-        <button type="button" class="cat-tab rounded-xl px-4 py-2.5 text-sm font-bold text-slate-300 cursor-pointer" data-cat="dev">البرمجة <span class="mono text-[10px] opacity-70">12</span></button>
-        <button type="button" class="cat-tab rounded-xl px-4 py-2.5 text-sm font-bold text-slate-300 cursor-pointer" data-cat="python">بايثون <span class="mono text-[10px] opacity-70">6</span></button>
-        <button type="button" class="cat-tab rounded-xl px-4 py-2.5 text-sm font-bold text-slate-300 cursor-pointer" data-cat="drivers">التعاريف <span class="mono text-[10px] opacity-70">10</span></button>
-        <button type="button" class="cat-tab rounded-xl px-4 py-2.5 text-sm font-bold text-slate-300 cursor-pointer" data-cat="office">الأوفيس <span class="mono text-[10px] opacity-70">8</span></button>
-      </div>
+    <!-- ============ VIEW: HOME ============ -->
+    <div class="view active" data-view="home">
+      <!-- HERO -->
+      <div class="glass-panel rounded-3xl p-5 relative overflow-hidden">
+        <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-l from-transparent via-cyan-400/60 to-transparent"></div>
 
-      <div class="relative flex-1 min-w-[220px]">
-        <i class="fa-solid fa-magnifying-glass absolute top-1/2 -translate-y-1/2 start-4 text-slate-500 text-sm"></i>
-        <input id="search-input" type="text" placeholder="ابحث عن برنامج... (Chrome, Office, Python)" autocomplete="off"
-          class="w-full rounded-xl bg-white/[0.04] border border-white/10 py-2.5 ps-11 pe-4 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-cyan-400/60 focus:ring-2 focus:ring-cyan-400/20 transition-all">
-      </div>
-
-      <button type="button" id="invert-cat-btn" class="btn-ghost rounded-xl px-4 py-2.5 text-sm font-bold text-amber-300 flex items-center justify-center gap-2 cursor-pointer whitespace-nowrap">
-        <i class="fa-solid fa-rotate"></i>
-        عكس تحديد القسم
-      </button>
-    </div>
-  </section>
-
-  <!-- ===== شريط الثقة — Uptodown ===== -->
-  <section class="mt-8">
-    <div class="glass-panel rounded-2xl p-5 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center gap-5 relative overflow-hidden">
-      <div class="absolute inset-y-0 start-0 w-1 bg-gradient-to-b from-cyan-400 via-blue-500 to-fuchsia-500"></div>
-      <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-blue-600/20 border border-cyan-400/30 flex items-center justify-center text-cyan-300 text-2xl icon-glow shrink-0">
-        <i class="fa-solid fa-store"></i>
-      </div>
-      <div class="flex-1">
-        <h3 class="text-lg font-black text-white">لماذا Uptodown؟</h3>
-        <p class="text-slate-400 text-sm leading-relaxed mt-1">
-          أحد أكبر متاجر البرامج المستقلة في العالم: كل ملف يُفحص عبر
-          <span class="text-cyan-300 font-bold">VirusTotal بأكثر من 70 مضاد فيروسات</span>، مع أرشيف كامل
-          للإصدارات القديمة وتوقيع SHA-256 لكل ملف — لا سكربتات، لا ملفات مولّدة، لا CMD.
-        </p>
-      </div>
-      <span class="mono text-[10px] font-semibold px-3 py-1.5 rounded-full border bg-cyan-400/10 border-cyan-400/40 text-cyan-300 whitespace-nowrap">uptodown.com</span>
-    </div>
-  </section>
-
-  <!-- =====================================================
-       قسم الأوفيس الجديد
-  ====================================================== -->
-  <section class="mt-12" id="office">
-    <div class="flex items-center gap-3 mb-5">
-      <span class="step-chip-new">قسم جديد</span>
-      <h2 class="text-lg sm:text-xl font-extrabold text-white">حزم Microsoft Office وأدوات المكتب</h2>
-      <div class="flex-1 h-px bg-gradient-to-l from-white/10 to-transparent"></div>
-    </div>
-
-    <div class="glass-panel rounded-3xl p-6 sm:p-7 relative overflow-hidden">
-      <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-l from-transparent via-blue-400/50 to-transparent"></div>
-      <div class="flex flex-col lg:flex-row gap-7">
-
-        <!-- النسخ -->
-        <div class="flex-1">
-          <div class="flex items-center gap-3 mb-5">
-            <div class="w-12 h-12 p-3 rounded-2xl bg-blue-500/15 border border-blue-400/30 flex items-center justify-center text-blue-300 text-2xl icon-glow shrink-0">
-              <i class="fa-brands fa-microsoft"></i>
-            </div>
-            <div>
-              <h3 class="text-lg font-black text-white">جميع نسخ أوفيس — من 2010 حتى Microsoft 365</h3>
-              <p class="text-[11px] text-slate-400">تحميل مباشر عبر Uptodown مع أرشيف الإصدارات الكامل + بدائل مجانية 100%</p>
-            </div>
-          </div>
-
-          <div id="office-chips" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5"></div>
-        </div>
-
-        <!-- إرشادات الترخيص -->
-        <div class="lg:w-80 shrink-0 rounded-2xl border border-emerald-400/25 bg-emerald-400/[0.05] p-5 flex flex-col">
-          <h4 class="font-black text-emerald-300 text-sm flex items-center gap-2 mb-3">
-            <i class="fa-solid fa-key"></i>
-            التفعيل والترخيص القانوني
-          </h4>
-          <ul class="text-[11.5px] leading-relaxed text-slate-300 space-y-2.5 flex-1">
-            <li class="flex gap-2"><i class="fa-solid fa-circle-check text-emerald-400 mt-1 shrink-0"></i>نسخ أوفيس المعروضة أصلية، والتفعيل يتطلب مفتاح منتج (Product Key) مشترى من Microsoft أو موزعيها المعتمدين.</li>
-            <li class="flex gap-2"><i class="fa-solid fa-circle-check text-emerald-400 mt-1 shrink-0"></i>اشتراك Microsoft 365 يمنحك أحدث النسخ دائماً مع 1TB تخزين OneDrive سحابي.</li>
-            <li class="flex gap-2"><i class="fa-solid fa-circle-check text-emerald-400 mt-1 shrink-0"></i>تريد مجانياً وبلا أي تفعيل؟ استخدم LibreOffice أو WPS Office من القائمة — كاملة ومتوافقة مع ملفات Office.</li>
-            <li class="flex gap-2 text-amber-300/90"><i class="fa-solid fa-shield-halved text-amber-300 mt-1 shrink-0"></i>لا نوفّر أدوات أو أكواداً تلتفّ على ترخيص Microsoft — الحماية القانونية أولاً.</li>
-          </ul>
-          <button type="button" id="office-browse-btn" class="mt-4 btn-gradient rounded-xl py-2.5 px-4 text-sm font-bold text-white flex items-center justify-center gap-2 cursor-pointer">
-            <i class="fa-solid fa-grip"></i>
-            عرض كل حزم الأوفيس في الشبكة
-          </button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== شبكة البطاقات — STEP 2 ===== -->
-  <section class="mt-12" id="apps">
-    <div class="flex flex-wrap items-center gap-3 mb-5">
-      <span class="step-chip mono">STEP 02</span>
-      <h2 class="text-lg sm:text-xl font-extrabold text-white">اختر برامجك — نقرة واحدة = صفحة التحميل فوراً</h2>
-      <div class="flex-1 h-px bg-gradient-to-l from-white/10 to-transparent min-w-[60px]"></div>
-      <span id="grid-count" class="mono text-[11px] text-slate-400">عرض 48 من 48 حزمة</span>
-    </div>
-
-    <div id="cards-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"></div>
-  </section>
-
-  <!-- ===== مركز التحميل + القائمة — STEP 3 ===== -->
-  <section class="mt-14" id="downloads">
-    <div class="flex items-center gap-3 mb-5">
-      <span class="step-chip mono">STEP 03</span>
-      <h2 class="text-lg sm:text-xl font-extrabold text-white">مركز التحميل الجماعي</h2>
-      <div class="flex-1 h-px bg-gradient-to-l from-white/10 to-transparent"></div>
-    </div>
-
-    <div class="grid grid-cols-1 lg:grid-cols-5 gap-5">
-
-      <div class="lg:col-span-2 glass-panel rounded-3xl p-6 flex flex-col gap-4">
-        <div class="flex items-center gap-3">
-          <div class="w-11 h-11 rounded-xl bg-blue-500/15 border border-blue-400/30 flex items-center justify-center text-blue-300 text-lg icon-glow">
-            <i class="fa-solid fa-cloud-arrow-down"></i>
-          </div>
-          <div>
-            <h3 class="font-black text-white">فتح كل المحدد دفعة واحدة</h3>
-            <p class="text-[11px] text-slate-400">صفحات Uptodown تتتابع في تبويبات جديدة</p>
-          </div>
-        </div>
-
-        <button type="button" id="download-all-btn" class="btn-gradient rounded-2xl py-4 px-5 text-white font-black text-base sm:text-lg flex items-center justify-center gap-3 cursor-pointer">
-          <i class="fa-solid fa-layer-group text-xl"></i>
-          تحميل كل البرامج المحددة
-        </button>
-
-        <div class="grid grid-cols-2 gap-3">
-          <button type="button" id="download-cat-btn" class="btn-ghost rounded-xl py-3 px-4 text-sm font-bold text-slate-200 flex items-center justify-center gap-2 cursor-pointer">
-            <i class="fa-solid fa-folder-open text-violet-300"></i>
-            تحميل القسم الحالي
-          </button>
-          <button type="button" id="copy-links-btn" class="btn-ghost rounded-xl py-3 px-4 text-sm font-bold text-slate-200 flex items-center justify-center gap-2 cursor-pointer">
-            <i class="fa-solid fa-link text-cyan-300"></i>
-            نسخ كل الروابط
-          </button>
-        </div>
-
-        <div class="rounded-xl border border-amber-400/25 bg-amber-400/[0.06] px-4 py-3 flex items-start gap-3">
-          <i class="fa-solid fa-circle-info text-amber-300 mt-0.5"></i>
-          <p class="text-[11px] leading-relaxed text-amber-200/80">
-            عند التحميل الجماعي قد يطلب متصفحك الإذن بفتح نوافذ منبثقة (Pop-ups) — اضغط
-            <span class="mono text-amber-200">Allow / سماح</span> وستُفتح صفحات Uptodown تباعاً،
-            ثم اضغط زر <span class="mono text-amber-200">Download</span> الأخضر في كل صفحة.
-          </p>
-        </div>
-
-        <div class="mt-1">
-          <div class="flex items-center justify-between mb-2">
-            <p class="text-[11px] font-bold text-slate-400 flex items-center gap-2"><i class="fa-solid fa-list-check text-cyan-300"></i> سجل النشاط</p>
-            <span class="mono text-[10px] text-slate-600">live</span>
-          </div>
-          <pre id="sim-log" dir="ltr" class="term term-scroll rounded-xl p-4 h-44 overflow-y-auto mono text-[11px] leading-relaxed text-left whitespace-pre-wrap"><span class="text-cyan-300">[SYSTEM] Uptodown Download Engine Ready.</span>
-<span class="text-slate-400">[INFO] 48 packages linked (incl. full Office suite).</span>
-<span class="text-slate-400">[INFO] Files are virus-scanned &amp; hosted by Uptodown.</span></pre>
-        </div>
-      </div>
-
-      <div class="lg:col-span-3 glass-panel rounded-3xl overflow-hidden flex flex-col">
-        <div class="flex items-center gap-3 px-5 py-4 border-b border-white/10 bg-white/[0.03]">
-          <div class="w-9 h-9 rounded-lg bg-cyan-500/15 border border-cyan-400/30 flex items-center justify-center text-cyan-300 icon-glow">
-            <i class="fa-solid fa-list-ul"></i>
-          </div>
-          <div>
-            <h3 class="font-black text-white text-sm sm:text-base">قائمة التحميل الحالية</h3>
-            <p class="text-[10.5px] text-slate-400">كل برنامج محدد — افتح صفحته على Uptodown أو احذفه من القائمة</p>
-          </div>
-          <span id="queue-count" class="ms-auto mono text-[10px] font-semibold px-3 py-1 rounded-full border bg-cyan-400/10 border-cyan-400/40 text-cyan-300">48 برنامج</span>
-        </div>
-        <div id="queue-list" class="flex-1 overflow-y-auto term-scroll p-4 space-y-2" style="max-height:460px"></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- =====================================================
-       قسم المطوّر والتواصل (مُعاد بناؤه بالكامل)
-  ====================================================== -->
-  <section class="mt-16" id="developer">
-    <div class="flex items-center gap-3 mb-5">
-      <span class="step-chip mono">STEP 04</span>
-      <h2 class="text-lg sm:text-xl font-extrabold text-white">المطوّر والتواصل</h2>
-      <div class="flex-1 h-px bg-gradient-to-l from-white/10 to-transparent"></div>
-    </div>
-
-    <div class="glass-panel rounded-3xl p-6 sm:p-8 relative overflow-hidden">
-      <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-l from-transparent via-emerald-400/50 to-transparent"></div>
-
-      <div class="flex flex-col sm:flex-row items-center gap-6">
-
-        <!-- Avatar -->
-        <div class="relative shrink-0">
-          <div class="w-20 h-20 rounded-3xl overflow-hidden bg-gradient-to-br from-emerald-500/25 to-cyan-600/25 border border-emerald-400/40 flex items-center justify-center">
-            <img src="1.jpg" alt="صورة المطور"
-                 class="w-full h-full object-cover"
-                 onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fa-solid fa-user-tie text-3xl text-emerald-300\'></i>';" />
-          </div>
-          <span class="absolute -bottom-1.5 -left-1.5 w-6 h-6 rounded-full bg-emerald-500 border-2 border-slate-900 flex items-center justify-center text-[10px] text-white">
-            <i class="fa-solid fa-check"></i>
+        <div class="inline-flex items-center gap-2 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-3 py-1 mb-3">
+          <span class="relative flex h-1.5 w-1.5">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-300 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-cyan-300"></span>
+          </span>
+          <span class="text-[10px] font-bold text-cyan-200">
+            <i class="fa-solid fa-store"></i> Uptodown
           </span>
         </div>
 
-        <!-- المعلومات -->
-        <div class="flex-1 text-center sm:text-start min-w-0">
-          <p class="text-[10px] font-bold text-emerald-300 tracking-[.25em] mb-1">المطوّر والمصمّم</p>
-          <h3 class="text-2xl sm:text-3xl font-black text-white">محمد صلاح</h3>
-          <p class="text-slate-400 text-sm mt-1.5 flex items-center justify-center sm:justify-start gap-2 font-bold">
+        <h1 class="text-2xl font-black leading-tight bg-gradient-to-r from-white via-cyan-200 to-fuchsia-400 bg-clip-text text-transparent mb-2">
+          المدير الشامل<br>للبرامج والأوفيس
+        </h1>
+
+        <p class="text-slate-400 text-[12px] leading-relaxed mb-4">
+          48 حزمة مفحوصة من <span class="text-cyan-300 font-bold">Uptodown</span> — تعاريف، برمجة، أوفيس.
+        </p>
+
+        <!-- STATS -->
+        <div class="grid grid-cols-3 gap-2 mb-4">
+          <div class="rounded-xl bg-cyan-400/10 border border-cyan-400/25 px-2 py-2 text-center">
+            <p class="mono text-base font-bold text-cyan-300" id="stat-selected">48</p>
+            <p class="text-[9px] text-slate-400 font-bold mt-0.5">محدد</p>
+          </div>
+          <div class="rounded-xl bg-emerald-400/10 border border-emerald-400/25 px-2 py-2 text-center">
+            <p class="mono text-base font-bold text-emerald-300" id="stat-downloaded">0</p>
+            <p class="text-[9px] text-slate-400 font-bold mt-0.5">فُتح</p>
+          </div>
+          <div class="rounded-xl bg-violet-400/10 border border-violet-400/25 px-2 py-2 text-center">
+            <p class="mono text-base font-bold text-violet-300">v6.0</p>
+            <p class="text-[9px] text-slate-400 font-bold mt-0.5">الإصدار</p>
+          </div>
+        </div>
+
+        <button type="button" class="btn-primary" onclick="switchView('apps')">
+          <i class="fa-solid fa-grip"></i>
+          استعرض البرامج
+        </button>
+      </div>
+
+      <!-- QUICK ACTIONS -->
+      <div class="section-head">
+        <h2>إجراءات سريعة</h2>
+        <div class="line"></div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-2.5">
+        <button class="glass-card rounded-2xl p-3.5 flex flex-col items-start gap-2 text-start active:scale-95 transition-transform" onclick="downloadSelected()">
+          <div class="w-9 h-9 rounded-lg bg-cyan-500/15 border border-cyan-400/30 flex items-center justify-center text-cyan-300 text-sm">
+            <i class="fa-solid fa-cloud-arrow-down"></i>
+          </div>
+          <div>
+            <p class="text-[12px] font-black text-white">تحميل المحدد</p>
+            <p class="text-[10px] text-slate-500 font-bold">فتح كل الصفحات</p>
+          </div>
+        </button>
+        <button class="glass-card rounded-2xl p-3.5 flex flex-col items-start gap-2 text-start active:scale-95 transition-transform" onclick="copySelectedLinks()">
+          <div class="w-9 h-9 rounded-lg bg-violet-500/15 border border-violet-400/30 flex items-center justify-center text-violet-300 text-sm">
+            <i class="fa-solid fa-link"></i>
+          </div>
+          <div>
+            <p class="text-[12px] font-black text-white">نسخ الروابط</p>
+            <p class="text-[10px] text-slate-500 font-bold">كل المحدد</p>
+          </div>
+        </button>
+        <button class="glass-card rounded-2xl p-3.5 flex flex-col items-start gap-2 text-start active:scale-95 transition-transform" onclick="switchView('office')">
+          <div class="w-9 h-9 rounded-lg bg-blue-500/15 border border-blue-400/30 flex items-center justify-center text-blue-300 text-sm">
+            <i class="fa-brands fa-microsoft"></i>
+          </div>
+          <div>
+            <p class="text-[12px] font-black text-white">حزم الأوفيس</p>
+            <p class="text-[10px] text-slate-500 font-bold">8 نسخ</p>
+          </div>
+        </button>
+        <button class="glass-card rounded-2xl p-3.5 flex flex-col items-start gap-2 text-start active:scale-95 transition-transform" onclick="switchView('developer')">
+          <div class="w-9 h-9 rounded-lg bg-emerald-500/15 border border-emerald-400/30 flex items-center justify-center text-emerald-300 text-sm">
+            <i class="fa-solid fa-user-tie"></i>
+          </div>
+          <div>
+            <p class="text-[12px] font-black text-white">المطوّر</p>
+            <p class="text-[10px] text-slate-500 font-bold">تواصل</p>
+          </div>
+        </button>
+      </div>
+
+      <!-- INFO BANNER -->
+      <div class="mt-4 rounded-2xl border border-amber-400/25 bg-amber-400/[0.06] p-3.5 flex items-start gap-3">
+        <i class="fa-solid fa-circle-info text-amber-300 mt-0.5 text-sm"></i>
+        <p class="text-[11px] leading-relaxed text-amber-200/85 font-semibold">
+          عند التحميل الجماعي اسمح بالنوافذ المنبثقة <span class="mono text-amber-200">(Pop-ups)</span>، ثم اضغط زر <span class="mono text-amber-200">Download</span> في كل صفحة.
+        </p>
+      </div>
+
+      <!-- CATEGORIES PREVIEW -->
+      <div class="section-head">
+        <h2>الأقسام</h2>
+        <div class="line"></div>
+      </div>
+      <div class="grid grid-cols-2 gap-2.5" id="home-cats"></div>
+    </div>
+
+    <!-- ============ VIEW: APPS ============ -->
+    <div class="view" data-view="apps">
+      <div class="section-head" style="margin-top:0;">
+        <span class="step-tag">STEP 01</span>
+        <h2>البرامج</h2>
+        <div class="line"></div>
+      </div>
+
+      <!-- SEARCH -->
+      <div class="search-bar">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input id="search-input" type="text" placeholder="ابحث عن برنامج..." autocomplete="off">
+      </div>
+
+      <!-- FILTER CHIPS -->
+      <div class="chip-scroll" id="cat-tabs">
+        <button class="filter-chip active" data-cat="all">الكل <span class="count">48</span></button>
+        <button class="filter-chip" data-cat="general">الأساسية <span class="count">12</span></button>
+        <button class="filter-chip" data-cat="dev">البرمجة <span class="count">12</span></button>
+        <button class="filter-chip" data-cat="python">بايثون <span class="count">6</span></button>
+        <button class="filter-chip" data-cat="drivers">التعاريف <span class="count">10</span></button>
+        <button class="filter-chip" data-cat="office">الأوفيس <span class="count">8</span></button>
+      </div>
+
+      <!-- ACTION ROW -->
+      <div class="flex gap-2 mb-3">
+        <button class="btn-secondary flex-1" onclick="selectAllApps(true)" style="padding:8px 10px;font-size:11px;">
+          <i class="fa-solid fa-check-double text-emerald-300"></i> الكل
+        </button>
+        <button class="btn-secondary flex-1" onclick="selectAllApps(false)" style="padding:8px 10px;font-size:11px;">
+          <i class="fa-solid fa-xmark text-rose-400"></i> تفريغ
+        </button>
+        <button class="btn-secondary flex-1" onclick="toggleCurrentCategorySelection()" style="padding:8px 10px;font-size:11px;">
+          <i class="fa-solid fa-rotate text-amber-300"></i> عكس
+        </button>
+      </div>
+
+      <p class="text-[10.5px] text-slate-500 font-bold mb-2" id="grid-count">عرض 48 من 48</p>
+
+      <!-- APP LIST -->
+      <div id="app-list" class="space-y-2"></div>
+    </div>
+
+    <!-- ============ VIEW: OFFICE ============ -->
+    <div class="view" data-view="office">
+      <div class="section-head" style="margin-top:0;">
+        <span class="step-tag amber">جديد</span>
+        <h2>حزم الأوفيس</h2>
+        <div class="line"></div>
+      </div>
+
+      <div class="glass-panel rounded-2xl p-4 mb-3">
+        <div class="flex items-center gap-3 mb-2">
+          <div class="w-10 h-10 rounded-xl bg-blue-500/15 border border-blue-400/30 flex items-center justify-center text-blue-300 text-lg">
+            <i class="fa-brands fa-microsoft"></i>
+          </div>
+          <div>
+            <p class="text-[13px] font-black text-white">جميع نسخ Microsoft Office</p>
+            <p class="text-[10px] text-slate-400 font-semibold">من 2010 حتى 365</p>
+          </div>
+        </div>
+      </div>
+
+      <div id="office-list" class="space-y-2"></div>
+
+      <!-- LICENSE GUIDE -->
+      <div class="mt-4 rounded-2xl border border-emerald-400/25 bg-emerald-400/[0.05] p-4">
+        <h4 class="font-black text-emerald-300 text-[12px] flex items-center gap-2 mb-2">
+          <i class="fa-solid fa-key"></i>
+          التفعيل والترخيص
+        </h4>
+        <ul class="text-[11px] leading-relaxed text-slate-300 space-y-2">
+          <li class="flex gap-2"><i class="fa-solid fa-check text-emerald-400 mt-0.5 shrink-0 text-[10px]"></i>النسخ أصلية، والتفعيل بمفتاح منتج من Microsoft.</li>
+          <li class="flex gap-2"><i class="fa-solid fa-check text-emerald-400 mt-0.5 shrink-0 text-[10px]"></i>Microsoft 365 يمنحك أحدث النسخ + 1TB OneDrive.</li>
+          <li class="flex gap-2"><i class="fa-solid fa-check text-emerald-400 mt-0.5 shrink-0 text-[10px]"></i>بدائل مجانية 100%: LibreOffice و WPS Office.</li>
+          <li class="flex gap-2 text-amber-300/90"><i class="fa-solid fa-shield text-amber-300 mt-0.5 shrink-0 text-[10px]"></i>لا نوفّر أدوات تلتفّ على الترخيص.</li>
+        </ul>
+      </div>
+
+      <button type="button" class="btn-secondary mt-3" onclick="switchView('apps'); filterCategory('office');">
+        <i class="fa-solid fa-grip"></i>
+        عرض الأوفيس في قائمة البرامج
+      </button>
+    </div>
+
+    <!-- ============ VIEW: DOWNLOADS ============ -->
+    <div class="view" data-view="downloads">
+      <div class="section-head" style="margin-top:0;">
+        <span class="step-tag">STEP 03</span>
+        <h2>مركز التحميل</h2>
+        <div class="line"></div>
+      </div>
+
+      <!-- BIG BUTTON -->
+      <button type="button" class="btn-primary mb-3" onclick="downloadSelected()">
+        <i class="fa-solid fa-layer-group text-lg"></i>
+        تحميل كل المحدد
+      </button>
+
+      <div class="grid grid-cols-2 gap-2.5 mb-3">
+        <button class="btn-secondary" onclick="downloadCurrentCategory()">
+          <i class="fa-solid fa-folder-open text-violet-300"></i>
+          القسم الحالي
+        </button>
+        <button class="btn-secondary" onclick="copySelectedLinks()">
+          <i class="fa-solid fa-link text-cyan-300"></i>
+          نسخ الروابط
+        </button>
+      </div>
+
+      <!-- LOG -->
+      <div class="section-head" style="margin-top:16px;">
+        <h2 class="text-[12px]">سجل النشاط</h2>
+        <div class="line"></div>
+        <span class="mono text-[9px] text-slate-600">live</span>
+      </div>
+      <pre id="sim-log" class="term" dir="ltr"><span class="text-cyan-300">[SYSTEM] Uptodown Download Engine Ready.</span>
+<span class="text-slate-400">[INFO] 48 packages linked.</span></pre>
+
+      <!-- QUEUE -->
+      <div class="section-head" style="margin-top:16px;">
+        <h2 class="text-[12px]">القائمة</h2>
+        <div class="line"></div>
+        <span class="mono text-[10px] font-bold px-2 py-0.5 rounded-full bg-cyan-400/10 border border-cyan-400/40 text-cyan-300" id="queue-count">48</span>
+      </div>
+      <div id="queue-list" class="space-y-2"></div>
+    </div>
+
+    <!-- ============ VIEW: DEVELOPER ============ -->
+    <div class="view" data-view="developer">
+      <div class="section-head" style="margin-top:0;">
+        <span class="step-tag">STEP 04</span>
+        <h2>المطوّر</h2>
+        <div class="line"></div>
+      </div>
+
+      <div class="glass-panel rounded-3xl p-5 relative overflow-hidden">
+        <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-l from-transparent via-emerald-400/50 to-transparent"></div>
+
+        <div class="flex flex-col items-center text-center mb-4">
+          <div class="relative mb-3">
+            <div class="w-20 h-20 rounded-3xl overflow-hidden bg-gradient-to-br from-emerald-500/25 to-cyan-600/25 border-2 border-emerald-400/40 flex items-center justify-center">
+              <img src="1.jpg" alt="المطور" class="w-full h-full object-cover"
+                   onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fa-solid fa-user-tie text-3xl text-emerald-300\'></i>';">
+            </div>
+            <span class="absolute -bottom-1 -left-1 w-6 h-6 rounded-full bg-emerald-500 border-2 border-slate-900 flex items-center justify-center text-[10px] text-white">
+              <i class="fa-solid fa-check"></i>
+            </span>
+          </div>
+
+          <p class="text-[9px] font-bold text-emerald-300 tracking-[.25em] mb-1">المطوّر والمصمّم</p>
+          <h3 class="text-xl font-black text-white mb-1">محمد صلاح</h3>
+          <p class="text-slate-400 text-[11px] font-bold flex items-center gap-1.5">
             <i class="fa-solid fa-location-dot text-rose-400"></i>
             العراق — البصرة
           </p>
-          <p class="text-slate-500 text-[12px] mt-2.5 leading-relaxed">
-            لطلب برامج جديدة، الإبلاغ عن رابط، أو اقتراحات التطوير — تواصل معي
-          </p>
         </div>
 
-        <!-- أزرار التواصل -->
-        <div class="flex flex-col gap-3 shrink-0 w-full sm:w-64">
+        <p class="text-slate-500 text-[11.5px] leading-relaxed text-center mb-4">
+          لطلب برامج جديدة، الإبلاغ عن رابط، أو اقتراحات التطوير — تواصل معي
+        </p>
+
+        <div class="flex flex-col gap-2.5">
           <a href="https://wa.me/9647824646130" target="_blank" rel="noopener"
-             class="group relative overflow-hidden rounded-xl bg-gradient-to-l from-emerald-500 to-green-600 py-3 px-5 text-white font-black text-sm flex items-center justify-center gap-2.5 transition-all hover:scale-[1.03] hover:brightness-110 active:scale-95 shadow-lg shadow-emerald-900/40">
+             class="rounded-xl bg-gradient-to-l from-emerald-500 to-green-600 py-3 px-4 text-white font-black text-[13px] flex items-center justify-center gap-2.5 active:scale-95 transition-transform shadow-lg shadow-emerald-900/40">
             <i class="fa-brands fa-whatsapp text-lg"></i>
-            واتساب: <span class="mono font-semibold" dir="ltr">07824646130</span>
+            واتساب: <span class="mono" dir="ltr">07824646130</span>
           </a>
           <a href="https://instagram.com/m2000_sll" target="_blank" rel="noopener"
-             class="group relative overflow-hidden rounded-xl bg-gradient-to-l from-[#833AB4] via-[#C13584] to-[#F56040] py-3 px-5 text-white font-black text-sm flex items-center justify-center gap-2.5 transition-all hover:scale-[1.03] hover:brightness-110 active:scale-95 shadow-lg shadow-fuchsia-900/40">
+             class="rounded-xl bg-gradient-to-l from-[#833AB4] via-[#C13584] to-[#F56040] py-3 px-4 text-white font-black text-[13px] flex items-center justify-center gap-2.5 active:scale-95 transition-transform shadow-lg shadow-fuchsia-900/40">
             <i class="fa-brands fa-instagram text-lg"></i>
-            إنستغرام: <span class="mono font-semibold" dir="ltr">@m2000_sll</span>
+            إنستغرام: <span class="mono" dir="ltr">@m2000_sll</span>
           </a>
         </div>
       </div>
-    </div>
-  </section>
 
-  <!-- ===== FOOTER ===== -->
-  <footer class="mt-16 glass-panel rounded-2xl px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-4 text-center">
-    <p class="text-sm text-slate-400 font-bold">
-      المدير الشامل <span class="text-cyan-300">v5.2</span> &bull; تطوير <span class="text-emerald-300">محمد صلاح</span> &bull; التحميل عبر Uptodown
-    </p>
-    <div class="flex items-center gap-5 text-[11px] text-slate-500 font-bold flex-wrap justify-center">
-      <span class="flex items-center gap-1.5"><i class="fa-solid fa-shield-virus text-emerald-400"></i> مفحوص بالفيروسات</span>
-      <span class="flex items-center gap-1.5"><i class="fa-solid fa-code-slash text-fuchsia-400"></i> بدون سكربتات</span>
-      <span class="flex items-center gap-1.5"><i class="fa-solid fa-scale-balanced text-amber-300"></i> ترخيص قانوني</span>
-      <span class="flex items-center gap-1.5"><i class="fa-brands fa-windows text-cyan-400"></i> Windows 10/11</span>
+      <!-- INFO -->
+      <div class="section-head">
+        <h2>عن التطبيق</h2>
+        <div class="line"></div>
+      </div>
+
+      <div class="glass-card rounded-2xl p-4 space-y-2.5">
+        <div class="flex items-center justify-between text-[11.5px]">
+          <span class="text-slate-400 font-bold">الإصدار</span>
+          <span class="mono text-cyan-300 font-bold">v6.0</span>
+        </div>
+        <div class="h-px bg-white/5"></div>
+        <div class="flex items-center justify-between text-[11.5px]">
+          <span class="text-slate-400 font-bold">عدد البرامج</span>
+          <span class="mono text-cyan-300 font-bold">48</span>
+        </div>
+        <div class="h-px bg-white/5"></div>
+        <div class="flex items-center justify-between text-[11.5px]">
+          <span class="text-slate-400 font-bold">مصدر التحميل</span>
+          <span class="text-violet-300 font-bold">Uptodown</span>
+        </div>
+        <div class="h-px bg-white/5"></div>
+        <div class="flex items-center justify-between text-[11.5px]">
+          <span class="text-slate-400 font-bold">الحماية</span>
+          <span class="text-emerald-300 font-bold">VirusTotal مفحوص</span>
+        </div>
+      </div>
+
+      <div class="mt-4 flex items-center justify-center gap-3 text-[10px] text-slate-500 font-bold flex-wrap">
+        <span><i class="fa-solid fa-shield-virus text-emerald-400"></i> مفحوص</span>
+        <span><i class="fa-solid fa-code-slash text-fuchsia-400"></i> بلا سكربتات</span>
+        <span><i class="fa-solid fa-scale-balanced text-amber-300"></i> ترخيص قانوني</span>
+      </div>
     </div>
-  </footer>
+
+  </div>
+
+  <!-- ===== FLOATING ACTION BUTTON ===== -->
+  <div id="fab">
+    <button onclick="downloadSelected()">
+      <i class="fa-solid fa-download"></i>
+      <span>تحميل (<span id="fab-count">48</span>)</span>
+    </button>
+  </div>
+
+  <!-- ===== BOTTOM NAVIGATION ===== -->
+  <nav id="bottom-nav">
+    <button class="nav-item active" data-view-btn="home">
+      <i class="fa-solid fa-house"></i>
+      <span>الرئيسية</span>
+    </button>
+    <button class="nav-item" data-view-btn="apps">
+      <i class="fa-solid fa-grip"></i>
+      <span>البرامج</span>
+    </button>
+    <button class="nav-item" data-view-btn="office">
+      <i class="fa-brands fa-microsoft"></i>
+      <span>الأوفيس</span>
+    </button>
+    <button class="nav-item" data-view-btn="downloads">
+      <i class="fa-solid fa-cloud-arrow-down"></i>
+      <span>التحميل</span>
+      <span class="nav-badge" id="nav-download-badge">48</span>
+    </button>
+    <button class="nav-item" data-view-btn="developer">
+      <i class="fa-solid fa-user-tie"></i>
+      <span>المطوّر</span>
+    </button>
+  </nav>
+
 </div>
 
-<!-- ===== Toast ===== -->
-<div id="toast" class="fixed bottom-6 left-6 z-50 opacity-0 translate-y-5 pointer-events-none">
-  <div class="glass-panel rounded-2xl border-cyan-400/30 px-5 py-4 flex items-center gap-3 max-w-sm">
-    <i id="toast-icon" class="fa-solid fa-circle-check text-emerald-400 text-xl shrink-0"></i>
-    <span id="toast-msg" class="font-bold text-sm text-white leading-relaxed"></span>
+<!-- ===== TOAST ===== -->
+<div id="toast">
+  <div class="toast-body">
+    <i id="toast-icon" class="fa-solid fa-circle-check text-emerald-400"></i>
+    <span id="toast-msg"></span>
   </div>
 </div>
 
 <script>
 /* =====================================================================
-   المدير الشامل — v5.2 (Uptodown + قسم الأوفيس + قائمة جانبية)
-   لا سكربتات، لا PowerShell، لا CMD — روابط متجر وملفات رسمية فقط
+   بوابة الويندوز — v6.0 Mobile App
+   Uptodown + Office + برمجة + تعاريف
 ===================================================================== */
 
-// ===== SECTION: DATABASE — 48 حزمة =====
+// ===== DATA =====
 const allPackages = [
-  // ---------- general (12) ----------
-  { id:'Google.Chrome', name:'Google Chrome', category:'general', icon:'fa-brands fa-chrome', color:'text-red-400', badge:'الأكثر شيوعاً', desc:'متصفح جوجل السريع والأكثر استخداماً في العالم', url:'https://google-chrome.en.uptodown.com/windows', selected:true },
-  { id:'Brave.Brave', name:'Brave Browser', category:'general', icon:'fa-brands fa-brave', color:'text-orange-400', desc:'متصفح يركز على الخصوصية مع حظر إعلانات مدمج', url:'https://brave-browser.en.uptodown.com/windows', selected:true },
+  // general (12)
+  { id:'Google.Chrome', name:'Google Chrome', category:'general', icon:'fa-brands fa-chrome', color:'text-red-400', badge:'الأكثر شيوعاً', desc:'متصفح جوجل السريع والأكثر استخداماً', url:'https://google-chrome.en.uptodown.com/windows', selected:true },
+  { id:'Brave.Brave', name:'Brave Browser', category:'general', icon:'fa-brands fa-brave', color:'text-orange-400', desc:'متصفح يركز على الخصوصية مع حظر إعلانات', url:'https://brave-browser.en.uptodown.com/windows', selected:true },
   { id:'RARLab.WinRAR', name:'WinRAR', category:'general', icon:'fa-solid fa-file-zipper', color:'text-yellow-400', desc:'أداة الضغط الأشهر لفك وضغط RAR و ZIP', url:'https://winrar.en.uptodown.com/windows', selected:true },
-  { id:'7zip.7zip', name:'7-Zip', category:'general', icon:'fa-solid fa-box-archive', color:'text-emerald-400', badge:'مفتوح المصدر', desc:'أرشيف مفتوح المصدر خفيف وسريع (7z / ZIP)', url:'https://7-zip.en.uptodown.com/windows', selected:true },
-  { id:'VideoLAN.VLC', name:'VLC Media Player', category:'general', icon:'fa-solid fa-circle-play', color:'text-orange-500', desc:'مشغل وسائط يدعم جميع الصيغ تقريباً', url:'https://vlc-media-player.en.uptodown.com/windows', selected:true },
+  { id:'7zip.7zip', name:'7-Zip', category:'general', icon:'fa-solid fa-box-archive', color:'text-emerald-400', badge:'مفتوح المصدر', desc:'أرشيف مفتوح المصدر خفيف وسريع', url:'https://7-zip.en.uptodown.com/windows', selected:true },
+  { id:'VideoLAN.VLC', name:'VLC Media Player', category:'general', icon:'fa-solid fa-circle-play', color:'text-orange-500', desc:'مشغل وسائط يدعم جميع الصيغ', url:'https://vlc-media-player.en.uptodown.com/windows', selected:true },
   { id:'Notepad++.Notepad++', name:'Notepad++', category:'general', icon:'fa-solid fa-file-lines', color:'text-lime-400', desc:'محرر نصوص وأكواد متقدم وخفيف', url:'https://notepad-plus.en.uptodown.com/windows', selected:true },
-  { id:'Telegram.TelegramDesktop', name:'Telegram Desktop', category:'general', icon:'fa-brands fa-telegram', color:'text-sky-400', desc:'تيليجرام لسطح المكتب — مراسلة سحابية سريعة', url:'https://telegram-desktop.en.uptodown.com/windows', selected:true },
-  { id:'Adobe.Acrobat.Reader.64-bit', name:'Adobe Acrobat Reader', category:'general', icon:'fa-solid fa-file-pdf', color:'text-red-500', desc:'قارئ ملفات PDF الرسمي من Adobe', url:'https://adobe-acrobat-reader-dc.en.uptodown.com/windows', selected:true },
-  { id:'Tonec.InternetDownloadManager', name:'Internet Download Manager', category:'general', icon:'fa-solid fa-arrow-down-wide-short', color:'text-indigo-400', desc:'مدير تحميل احترافي يسرّع التنزيلات حتى 5 أضعاف', url:'https://internet-download-manager.en.uptodown.com/windows', selected:true },
-  { id:'IObit.DriverBooster', name:'Driver Booster', category:'general', icon:'fa-solid fa-gauge-high', color:'text-rose-400', desc:'تحديث تلقائي لتعاريف الجهاز ومكونات الألعاب', url:'https://driver-booster.en.uptodown.com/windows', selected:true },
-  { id:'NeatDownloadManager.NeatDownloadManager', name:'Neat Download Manager', category:'general', icon:'fa-solid fa-cloud-arrow-down', color:'text-teal-400', desc:'مدير تنزيلات خفيف ومجاني وسريع', url:'https://neat-download-manager.en.uptodown.com/windows', selected:true },
-  { id:'OhSoft.oCam', name:'oCam Screen Recorder', category:'general', icon:'fa-solid fa-video', color:'text-purple-400', desc:'تسجيل شاشة سهل وخفيف بجودة عالية', url:'https://ocam.en.uptodown.com/windows', selected:true },
+  { id:'Telegram.TelegramDesktop', name:'Telegram Desktop', category:'general', icon:'fa-brands fa-telegram', color:'text-sky-400', desc:'تيليجرام لسطح المكتب — مراسلة سريعة', url:'https://telegram-desktop.en.uptodown.com/windows', selected:true },
+  { id:'Adobe.Acrobat.Reader.64-bit', name:'Adobe Acrobat Reader', category:'general', icon:'fa-solid fa-file-pdf', color:'text-red-500', desc:'قارئ ملفات PDF الرسمي', url:'https://adobe-acrobat-reader-dc.en.uptodown.com/windows', selected:true },
+  { id:'Tonec.InternetDownloadManager', name:'Internet Download Manager', category:'general', icon:'fa-solid fa-arrow-down-wide-short', color:'text-indigo-400', desc:'مدير تحميل احترافي يسرّع التنزيلات', url:'https://internet-download-manager.en.uptodown.com/windows', selected:true },
+  { id:'IObit.DriverBooster', name:'Driver Booster', category:'general', icon:'fa-solid fa-gauge-high', color:'text-rose-400', desc:'تحديث تلقائي لتعاريف الجهاز', url:'https://driver-booster.en.uptodown.com/windows', selected:true },
+  { id:'NeatDownloadManager.NeatDownloadManager', name:'Neat Download Manager', category:'general', icon:'fa-solid fa-cloud-arrow-down', color:'text-teal-400', desc:'مدير تنزيلات خفيف ومجاني', url:'https://neat-download-manager.en.uptodown.com/windows', selected:true },
+  { id:'OhSoft.oCam', name:'oCam Screen Recorder', category:'general', icon:'fa-solid fa-video', color:'text-purple-400', desc:'تسجيل شاشة سهل وخفيف', url:'https://ocam.en.uptodown.com/windows', selected:true },
 
-  // ---------- dev (12) ----------
-  { id:'Microsoft.VisualStudioCode', name:'Visual Studio Code', category:'dev', icon:'fa-solid fa-code', color:'text-blue-400', badge:'الأشهر للمطورين', desc:'محرر الأكواد الأشهر من مايكروسوفت بإضافات ضخمة', url:'https://visual-studio-code.en.uptodown.com/windows', selected:true },
-  { id:'Git.Git', name:'Git', category:'dev', icon:'fa-brands fa-git-alt', color:'text-orange-400', badge:'أساسي', desc:'نظام إدارة الإصدارات — أساس كل مشروع برمجي', url:'https://git-for-windows.en.uptodown.com/windows', selected:true },
-  { id:'GitHub.GitHubDesktop', name:'GitHub Desktop', category:'dev', icon:'fa-brands fa-github', color:'text-slate-300', desc:'واجهة رسومية سهلة لإدارة مستودعات GitHub', url:'https://github-desktop.en.uptodown.com/windows', selected:true },
-  { id:'OpenJS.NodeJS.LTS', name:'Node.js LTS', category:'dev', icon:'fa-brands fa-node-js', color:'text-green-400', badge:'LTS', desc:'بيئة تشغيل JavaScript على الخادم — إصدار مستقر', url:'https://node-js.en.uptodown.com/windows', selected:true },
-  { id:'ApacheFriends.Xampp.8.2', name:'XAMPP', category:'dev', icon:'fa-solid fa-server', color:'text-amber-400', desc:'خادم محلي متكامل: Apache + MySQL + PHP', url:'https://xampp.en.uptodown.com/windows', selected:true },
-  { id:'DBBrowserForSQLite.DBBrowserForSQLite', name:'DB Browser for SQLite', category:'dev', icon:'fa-solid fa-table', color:'text-cyan-300', desc:'إدارة قواعد بيانات SQLite بواجهة رسومية', url:'https://db-browser-for-sqlite.en.uptodown.com/windows', selected:true },
-  { id:'dbeaver.dbeaver', name:'DBeaver', category:'dev', icon:'fa-solid fa-database', color:'text-teal-300', desc:'أداة إدارة قواعد بيانات شاملة لكل الأنظمة', url:'https://dbeaver.en.uptodown.com/windows', selected:true },
-  { id:'Postman.Postman', name:'Postman', category:'dev', icon:'fa-solid fa-paper-plane', color:'text-orange-400', desc:'اختبار وبناء وتوثيق واجهات API', url:'https://postman.en.uptodown.com/windows', selected:true },
-  { id:'Docker.DockerDesktop', name:'Docker Desktop', category:'dev', icon:'fa-brands fa-docker', color:'text-sky-400', desc:'حاويات لتطوير وشحن التطبيقات بسهولة', url:'https://docker.en.uptodown.com/windows', selected:true },
-  { id:'JetBrains.PyCharm.Community', name:'PyCharm Community', category:'dev', icon:'fa-brands fa-python', color:'text-lime-400', badge:'Community', desc:'بيئة تطوير Python احترافية من JetBrains', url:'https://pycharm-community.en.uptodown.com/windows', selected:true },
-  { id:'JetBrains.IntelliJIDEA.Community', name:'IntelliJ IDEA Community', category:'dev', icon:'fa-solid fa-lightbulb', color:'text-orange-300', desc:'بيئة تطوير Java الذكية من JetBrains', url:'https://intellij-idea-community.en.uptodown.com/windows', selected:true },
-  { id:'Google.AndroidStudio', name:'Android Studio', category:'dev', icon:'fa-brands fa-android', color:'text-green-400', desc:'البيئة الرسمية لتطوير تطبيقات أندرويد', url:'https://android-studio.en.uptodown.com/windows', selected:true },
+  // dev (12)
+  { id:'Microsoft.VisualStudioCode', name:'Visual Studio Code', category:'dev', icon:'fa-solid fa-code', color:'text-blue-400', badge:'الأشهر', desc:'محرر الأكواد الأشهر من مايكروسوفت', url:'https://visual-studio-code.en.uptodown.com/windows', selected:true },
+  { id:'Git.Git', name:'Git', category:'dev', icon:'fa-brands fa-git-alt', color:'text-orange-400', badge:'أساسي', desc:'نظام إدارة الإصدارات', url:'https://git-for-windows.en.uptodown.com/windows', selected:true },
+  { id:'GitHub.GitHubDesktop', name:'GitHub Desktop', category:'dev', icon:'fa-brands fa-github', color:'text-slate-300', desc:'واجهة رسومية لإدارة GitHub', url:'https://github-desktop.en.uptodown.com/windows', selected:true },
+  { id:'OpenJS.NodeJS.LTS', name:'Node.js LTS', category:'dev', icon:'fa-brands fa-node-js', color:'text-green-400', badge:'LTS', desc:'بيئة تشغيل JavaScript على الخادم', url:'https://node-js.en.uptodown.com/windows', selected:true },
+  { id:'ApacheFriends.Xampp.8.2', name:'XAMPP', category:'dev', icon:'fa-solid fa-server', color:'text-amber-400', desc:'خادم محلي متكامل Apache + MySQL + PHP', url:'https://xampp.en.uptodown.com/windows', selected:true },
+  { id:'DBBrowserForSQLite.DBBrowserForSQLite', name:'DB Browser for SQLite', category:'dev', icon:'fa-solid fa-table', color:'text-cyan-300', desc:'إدارة قواعد SQLite بواجهة رسومية', url:'https://db-browser-for-sqlite.en.uptodown.com/windows', selected:true },
+  { id:'dbeaver.dbeaver', name:'DBeaver', category:'dev', icon:'fa-solid fa-database', color:'text-teal-300', desc:'أداة إدارة قواعد بيانات شاملة', url:'https://dbeaver.en.uptodown.com/windows', selected:true },
+  { id:'Postman.Postman', name:'Postman', category:'dev', icon:'fa-solid fa-paper-plane', color:'text-orange-400', desc:'اختبار وبناء واجهات API', url:'https://postman.en.uptodown.com/windows', selected:true },
+  { id:'Docker.DockerDesktop', name:'Docker Desktop', category:'dev', icon:'fa-brands fa-docker', color:'text-sky-400', desc:'حاويات لتطوير التطبيقات', url:'https://docker.en.uptodown.com/windows', selected:true },
+  { id:'JetBrains.PyCharm.Community', name:'PyCharm Community', category:'dev', icon:'fa-brands fa-python', color:'text-lime-400', badge:'Community', desc:'بيئة تطوير Python احترافية', url:'https://pycharm-community.en.uptodown.com/windows', selected:true },
+  { id:'JetBrains.IntelliJIDEA.Community', name:'IntelliJ IDEA Community', category:'dev', icon:'fa-solid fa-lightbulb', color:'text-orange-300', desc:'بيئة تطوير Java الذكية', url:'https://intellij-idea-community.en.uptodown.com/windows', selected:true },
+  { id:'Google.AndroidStudio', name:'Android Studio', category:'dev', icon:'fa-brands fa-android', color:'text-green-400', desc:'البيئة الرسمية لتطوير أندرويد', url:'https://android-studio.en.uptodown.com/windows', selected:true },
 
-  // ---------- python (6) ----------
-  { id:'Python.Python.3.13', name:'Python 3.13', category:'python', icon:'fa-brands fa-python', color:'text-sky-400', badge:'Latest', desc:'أحدث إصدار من بايثون — حمّله مباشرة من صفحة Uptodown', url:'https://python.en.uptodown.com/windows', selected:true },
-  { id:'Python.Python.3.12', name:'Python 3.12', category:'python', icon:'fa-brands fa-python', color:'text-yellow-300', badge:'مستقر', desc:'اختر الإصدار 3.12 من أرشيف الإصدارات في صفحة Uptodown', url:'https://python.en.uptodown.com/windows/versions', selected:true },
-  { id:'Python.Python.3.11', name:'Python 3.11', category:'python', icon:'fa-brands fa-python', color:'text-blue-300', desc:'اختر الإصدار 3.11 من أرشيف الإصدارات في صفحة Uptodown', url:'https://python.en.uptodown.com/windows/versions', selected:true },
-  { id:'Python.Python.3.10', name:'Python 3.10', category:'python', icon:'fa-brands fa-python', color:'text-emerald-300', desc:'اختر الإصدار 3.10 من أرشيف الإصدارات في صفحة Uptodown', url:'https://python.en.uptodown.com/windows/versions', selected:true },
-  { id:'Python.Python.3.9', name:'Python 3.9', category:'python', icon:'fa-brands fa-python', color:'text-fuchsia-300', desc:'اختر الإصدار 3.9 من أرشيف الإصدارات في صفحة Uptodown', url:'https://python.en.uptodown.com/windows/versions', selected:true },
-  { id:'Python.Python.3.8', name:'Python 3.8', category:'python', icon:'fa-brands fa-python', color:'text-rose-300', desc:'اختر الإصدار 3.8 من أرشيف الإصدارات في صفحة Uptodown', url:'https://python.en.uptodown.com/windows/versions', selected:true },
+  // python (6)
+  { id:'Python.Python.3.13', name:'Python 3.13', category:'python', icon:'fa-brands fa-python', color:'text-sky-400', badge:'Latest', desc:'أحدث إصدار من بايثون', url:'https://python.en.uptodown.com/windows', selected:true },
+  { id:'Python.Python.3.12', name:'Python 3.12', category:'python', icon:'fa-brands fa-python', color:'text-yellow-300', badge:'مستقر', desc:'الإصدار 3.12 من أرشيف الإصدارات', url:'https://python.en.uptodown.com/windows/versions', selected:true },
+  { id:'Python.Python.3.11', name:'Python 3.11', category:'python', icon:'fa-brands fa-python', color:'text-blue-300', desc:'الإصدار 3.11 من الأرشيف', url:'https://python.en.uptodown.com/windows/versions', selected:true },
+  { id:'Python.Python.3.10', name:'Python 3.10', category:'python', icon:'fa-brands fa-python', color:'text-emerald-300', desc:'الإصدار 3.10 من الأرشيف', url:'https://python.en.uptodown.com/windows/versions', selected:true },
+  { id:'Python.Python.3.9', name:'Python 3.9', category:'python', icon:'fa-brands fa-python', color:'text-fuchsia-300', desc:'الإصدار 3.9 من الأرشيف', url:'https://python.en.uptodown.com/windows/versions', selected:true },
+  { id:'Python.Python.3.8', name:'Python 3.8', category:'python', icon:'fa-brands fa-python', color:'text-rose-300', desc:'الإصدار 3.8 من الأرشيف', url:'https://python.en.uptodown.com/windows/versions', selected:true },
 
-  // ---------- drivers (10) ----------
-  { id:'Microsoft.VCRedist.2015+.x64', name:'Visual C++ Redistributable (x64)', category:'drivers', icon:'fa-brands fa-microsoft', color:'text-red-400', badge:'ضروري للألعاب', desc:'مكتبات Visual C++ الأساسية 2015-2022 بنسخة 64-bit', url:'https://microsoft-visual-c-plus-plus.en.uptodown.com/windows', selected:true },
-  { id:'Microsoft.VCRedist.2015+.x86', name:'Visual C++ Redistributable (x86)', category:'drivers', icon:'fa-brands fa-microsoft', color:'text-rose-300', desc:'النسخة 32-bit من مكتبات 2015-2022 من أرشيف الإصدارات', url:'https://microsoft-visual-c-plus-plus.en.uptodown.com/windows/versions', selected:true },
-  { id:'Microsoft.VCRedist.AIO', name:'Visual C++ All-in-One 2005-2022', category:'drivers', icon:'fa-solid fa-cubes', color:'text-blue-300', badge:'حزمة شاملة', desc:'حزمة واحدة تثبّت كل إصدارات Visual C++ من 2005 إلى 2022', url:'https://visual-cplusplus-redistributable-all-in-one-repack.en.uptodown.com/windows', selected:true },
-  { id:'Microsoft.DotNet.DesktopRuntime.8', name:'.NET 8 Desktop Runtime', category:'drivers', icon:'fa-solid fa-circle-nodes', color:'text-violet-400', badge:'مُوصى به', desc:'بيئة تشغيل تطبيقات .NET الحديثة — ملف رسمي مباشر من Microsoft', url:'https://aka.ms/dotnet/8.0/windowsdesktop-runtime-win-x64.exe', selected:true },
-  { id:'Microsoft.DotNet.DesktopRuntime.6', name:'.NET 6 Desktop Runtime', category:'drivers', icon:'fa-solid fa-circle-nodes', color:'text-purple-300', desc:'بيئة تشغيل .NET للتطبيقات السابقة — ملف رسمي مباشر من Microsoft', url:'https://aka.ms/dotnet/6.0/windowsdesktop-runtime-win-x64.exe', selected:true },
-  { id:'Microsoft.DirectX', name:'DirectX End-User Runtime', category:'drivers', icon:'fa-solid fa-gamepad', color:'text-green-400', desc:'مكتبات DirectX بجانب النظام — دعم الألعاب القديمة', url:'https://directx.en.uptodown.com/windows', selected:true },
-  { id:'Intel.IntelDriverAndSupportAssistant', name:'Intel Driver & Support Assistant', category:'drivers', icon:'fa-solid fa-microchip', color:'text-sky-300', desc:'تحديث تعاريف معالجات وبطاقات Intel — ملف رسمي مباشر من Intel', url:'https://downloadmirror.intel.com/28425/a08/Intel-Driver-and-Support-Assistant-Installer.exe', selected:true },
-  { id:'Nvidia.GeForceExperience', name:'NVIDIA GeForce Experience', category:'drivers', icon:'fa-solid fa-bolt', color:'text-lime-400', badge:'GPU', desc:'تحديث تعاريف بطاقات NVIDIA وتحسين الألعاب', url:'https://geforce-experience.en.uptodown.com/windows', selected:true },
-  { id:'sdi-tool.SnappyDriverInstaller', name:'Snappy Driver Installer', category:'drivers', icon:'fa-solid fa-screwdriver-wrench', color:'text-amber-300', badge:'Offline', desc:'تثبيت حزمة تعاريف كاملة دون اتصال بالإنترنت', url:'https://snappy-driver-installer.en.uptodown.com/windows', selected:true },
-  { id:'CodecGuide.KLiteCodecPack', name:'K-Lite Codec Pack Mega', category:'drivers', icon:'fa-solid fa-photo-film', color:'text-cyan-300', desc:'حزمة الترميزات الكاملة لتشغيل جميع صيغ الفيديو والصوت', url:'https://k-lite-mega-codec-pack.en.uptodown.com/windows', selected:true },
+  // drivers (10)
+  { id:'Microsoft.VCRedist.2015+.x64', name:'Visual C++ Redistributable (x64)', category:'drivers', icon:'fa-brands fa-microsoft', color:'text-red-400', badge:'ضروري', desc:'مكتبات Visual C++ 2015-2022 64-bit', url:'https://microsoft-visual-c-plus-plus.en.uptodown.com/windows', selected:true },
+  { id:'Microsoft.VCRedist.2015+.x86', name:'Visual C++ Redistributable (x86)', category:'drivers', icon:'fa-brands fa-microsoft', color:'text-rose-300', desc:'نسخة 32-bit من مكتبات 2015-2022', url:'https://microsoft-visual-c-plus-plus.en.uptodown.com/windows/versions', selected:true },
+  { id:'Microsoft.VCRedist.AIO', name:'Visual C++ All-in-One 2005-2022', category:'drivers', icon:'fa-solid fa-cubes', color:'text-blue-300', badge:'شامل', desc:'كل إصدارات Visual C++ في حزمة واحدة', url:'https://visual-cplusplus-redistributable-all-in-one-repack.en.uptodown.com/windows', selected:true },
+  { id:'Microsoft.DotNet.DesktopRuntime.8', name:'.NET 8 Desktop Runtime', category:'drivers', icon:'fa-solid fa-circle-nodes', color:'text-violet-400', badge:'مُوصى', desc:'بيئة تشغيل .NET — ملف رسمي مباشر', url:'https://aka.ms/dotnet/8.0/windowsdesktop-runtime-win-x64.exe', selected:true },
+  { id:'Microsoft.DotNet.DesktopRuntime.6', name:'.NET 6 Desktop Runtime', category:'drivers', icon:'fa-solid fa-circle-nodes', color:'text-purple-300', desc:'بيئة تشغيل .NET — ملف رسمي مباشر', url:'https://aka.ms/dotnet/6.0/windowsdesktop-runtime-win-x64.exe', selected:true },
+  { id:'Microsoft.DirectX', name:'DirectX End-User Runtime', category:'drivers', icon:'fa-solid fa-gamepad', color:'text-green-400', desc:'مكتبات DirectX — دعم الألعاب القديمة', url:'https://directx.en.uptodown.com/windows', selected:true },
+  { id:'Intel.IntelDriverAndSupportAssistant', name:'Intel Driver & Support Assistant', category:'drivers', icon:'fa-solid fa-microchip', color:'text-sky-300', desc:'تحديث تعاريف Intel — ملف رسمي', url:'https://downloadmirror.intel.com/28425/a08/Intel-Driver-and-Support-Assistant-Installer.exe', selected:true },
+  { id:'Nvidia.GeForceExperience', name:'NVIDIA GeForce Experience', category:'drivers', icon:'fa-solid fa-bolt', color:'text-lime-400', badge:'GPU', desc:'تحديث تعاريف NVIDIA وتحسين الألعاب', url:'https://geforce-experience.en.uptodown.com/windows', selected:true },
+  { id:'sdi-tool.SnappyDriverInstaller', name:'Snappy Driver Installer', category:'drivers', icon:'fa-solid fa-screwdriver-wrench', color:'text-amber-300', badge:'Offline', desc:'تثبيت تعاريف دون اتصال', url:'https://snappy-driver-installer.en.uptodown.com/windows', selected:true },
+  { id:'CodecGuide.KLiteCodecPack', name:'K-Lite Codec Pack Mega', category:'drivers', icon:'fa-solid fa-photo-film', color:'text-cyan-300', desc:'حزمة الترميزات الكاملة', url:'https://k-lite-mega-codec-pack.en.uptodown.com/windows', selected:true },
 
-  // ---------- office (8) ----------
-  { id:'Microsoft.Microsoft365', name:'Microsoft 365', category:'office', icon:'fa-solid fa-cloud', color:'text-sky-400', badge:'اشتراك رسمي', desc:'أوفيس السحابي — Word وExcel وPowerPoint بتحديثات دائمة و1TB تخزين', url:'https://www.microsoft.com/microsoft-365', selected:true },
-  { id:'Microsoft.Office.2021', name:'Microsoft Office 2021', category:'office', icon:'fa-brands fa-microsoft', color:'text-blue-400', badge:'ترخيص دائم', desc:'أحدث نسخة بترخيص دائم — شراء مرة واحدة بدون اشتراك', url:'https://microsoft-office-2021.en.uptodown.com/windows', selected:true },
-  { id:'Microsoft.Office.2019', name:'Microsoft Office 2019', category:'office', icon:'fa-brands fa-microsoft', color:'text-indigo-400', desc:'النسخة الكلاسيكية المستقرة مع كل التطبيقات الأساسية', url:'https://microsoft-office-2019.en.uptodown.com/windows', selected:true },
-  { id:'Microsoft.Office.2016', name:'Microsoft Office 2016', category:'office', icon:'fa-brands fa-microsoft', color:'text-cyan-400', badge:'شائعة', desc:'نسخة شائعة ومتوافقة مع معظم الأنظمة', url:'https://microsoft-office-2016.en.uptodown.com/windows', selected:true },
-  { id:'Microsoft.Office.2013', name:'Microsoft Office 2013', category:'office', icon:'fa-brands fa-microsoft', color:'text-teal-400', desc:'نسخة خفيفة مناسبة للأجهزة القديمة والمتوسطة', url:'https://microsoft-office-2013.en.uptodown.com/windows', selected:true },
-  { id:'Microsoft.Office.2010', name:'Microsoft Office 2010', category:'office', icon:'fa-brands fa-microsoft', color:'text-slate-400', badge:'كلاسيكية', desc:'النسخة الكلاسيكية الشهيرة — مثالية للأجهزة الضعيفة', url:'https://microsoft-office-2010.en.uptodown.com/windows', selected:true },
-  { id:'TheDocumentFoundation.LibreOffice', name:'LibreOffice', category:'office', icon:'fa-solid fa-file-word', color:'text-emerald-400', badge:'مجاني بالكامل', desc:'بديل أوفيس مفتوح المصدر ومجاني 100% — بدون أي تفعيل إطلاقاً', url:'https://libreoffice.en.uptodown.com/windows', selected:true },
-  { id:'Kingsoft.WPSOffice', name:'WPS Office', category:'office', icon:'fa-solid fa-file-invoice', color:'text-orange-400', badge:'مجاني', desc:'حزمة مكتب مجانية خفيفة ومتوافقة تماماً مع ملفات Microsoft Office', url:'https://wps-office.en.uptodown.com/windows', selected:true }
+  // office (8)
+  { id:'Microsoft.Microsoft365', name:'Microsoft 365', category:'office', icon:'fa-solid fa-cloud', color:'text-sky-400', badge:'اشتراك', desc:'أوفيس السحابي + 1TB تخزين', url:'https://www.microsoft.com/microsoft-365', selected:true },
+  { id:'Microsoft.Office.2021', name:'Microsoft Office 2021', category:'office', icon:'fa-brands fa-microsoft', color:'text-blue-400', badge:'دائم', desc:'أحدث نسخة بترخيص دائم', url:'https://microsoft-office-2021.en.uptodown.com/windows', selected:true },
+  { id:'Microsoft.Office.2019', name:'Microsoft Office 2019', category:'office', icon:'fa-brands fa-microsoft', color:'text-indigo-400', desc:'النسخة الكلاسيكية المستقرة', url:'https://microsoft-office-2019.en.uptodown.com/windows', selected:true },
+  { id:'Microsoft.Office.2016', name:'Microsoft Office 2016', category:'office', icon:'fa-brands fa-microsoft', color:'text-cyan-400', badge:'شائعة', desc:'نسخة متوافقة مع معظم الأنظمة', url:'https://microsoft-office-2016.en.uptodown.com/windows', selected:true },
+  { id:'Microsoft.Office.2013', name:'Microsoft Office 2013', category:'office', icon:'fa-brands fa-microsoft', color:'text-teal-400', desc:'نسخة خفيفة للأجهزة القديمة', url:'https://microsoft-office-2013.en.uptodown.com/windows', selected:true },
+  { id:'Microsoft.Office.2010', name:'Microsoft Office 2010', category:'office', icon:'fa-brands fa-microsoft', color:'text-slate-400', badge:'كلاسيكية', desc:'النسخة الكلاسيكية الشهيرة', url:'https://microsoft-office-2010.en.uptodown.com/windows', selected:true },
+  { id:'TheDocumentFoundation.LibreOffice', name:'LibreOffice', category:'office', icon:'fa-solid fa-file-word', color:'text-emerald-400', badge:'مجاني', desc:'بديل مفتوح المصدر ومجاني 100%', url:'https://libreoffice.en.uptodown.com/windows', selected:true },
+  { id:'Kingsoft.WPSOffice', name:'WPS Office', category:'office', icon:'fa-solid fa-file-invoice', color:'text-orange-400', badge:'مجاني', desc:'حزمة مكتب مجانية متوافقة مع Office', url:'https://wps-office.en.uptodown.com/windows', selected:true }
 ];
 
-// ===== SECTION: STATE =====
+const CAT_LABELS = { all:'الكل', general:'الأساسية', dev:'البرمجة', python:'بايثون', drivers:'التعاريف', office:'الأوفيس' };
+const CAT_META = {
+  general: { icon:'fa-solid fa-box-open',    color:'text-amber-300',   bg:'bg-amber-400/10',   border:'border-amber-400/25' },
+  dev:     { icon:'fa-solid fa-code',         color:'text-blue-300',    bg:'bg-blue-400/10',    border:'border-blue-400/25' },
+  python:  { icon:'fa-brands fa-python',      color:'text-yellow-300',  bg:'bg-yellow-400/10',  border:'border-yellow-400/25' },
+  drivers: { icon:'fa-solid fa-microchip',    color:'text-rose-300',    bg:'bg-rose-400/10',    border:'border-rose-400/25' },
+  office:  { icon:'fa-brands fa-microsoft',   color:'text-cyan-300',    bg:'bg-cyan-400/10',    border:'border-cyan-400/25' }
+};
+
+// ===== STATE =====
 let currentCategory = 'all';
-let searchQuery     = '';
-let toastTimer      = null;
-let warpTimer       = null;
-let warpSpeed3D     = false;
-let coreShapeIndex  = 0;
+let searchQuery = '';
+let toastTimer = null;
+let currentView = 'home';
 const downloadedIds = new Set();
 
-const CAT_LABELS = { all:'الكل', general:'البرامج الأساسية', dev:'البرمجة', python:'بايثون', drivers:'التعاريف', office:'الأوفيس' };
-
-// ===== SECTION: HELPERS =====
 const $ = id => document.getElementById(id);
 
+// ===== HELPERS =====
 function hostOf(url){
   try { return new URL(url).hostname.replace(/^www\./,''); }
   catch(e){ return 'uptodown.com'; }
 }
 function isUptodown(url){ return hostOf(url).includes('uptodown.com'); }
 function isDirectFile(url){ return /\.(exe|msi|zip)([?#]|$)/i.test(url) && !isUptodown(url); }
-
-// تطبيع عربي للبحث
 function normalizeArabic(str){
   if (!str) return '';
-  return String(str)
-    .toLowerCase()
-    .replace(/[أإآ]/g, 'ا')
-    .replace(/ة/g, 'ه')
-    .replace(/ى/g, 'ي')
+  return String(str).toLowerCase()
+    .replace(/[أإآ]/g, 'ا').replace(/ة/g, 'ه').replace(/ى/g, 'ي')
     .replace(/[\u064B-\u0652]/g, '');
 }
 
-// ===== SECTION: TOAST =====
-function showToast(message, type){
-  type = type || 'ok';
+// ===== TOAST =====
+function showToast(message, type='ok'){
   const toast = $('toast'), icon = $('toast-icon'), msg = $('toast-msg');
   if (!toast) return;
-
   const conf = {
-    ok:   { cls:'fa-solid fa-circle-check text-emerald-400 text-xl shrink-0', border:'border-emerald-400/30' },
-    warn: { cls:'fa-solid fa-triangle-exclamation text-amber-300 text-xl shrink-0', border:'border-amber-400/30' },
-    info: { cls:'fa-solid fa-circle-info text-cyan-300 text-xl shrink-0', border:'border-cyan-400/30' }
-  }[type] || { cls:'fa-solid fa-circle-check text-emerald-400 text-xl shrink-0', border:'border-emerald-400/30' };
-
+    ok:   { cls:'fa-solid fa-circle-check text-emerald-400', color:'border-emerald-400/50' },
+    warn: { cls:'fa-solid fa-triangle-exclamation text-amber-300', color:'border-amber-400/50' },
+    info: { cls:'fa-solid fa-circle-info text-cyan-300', color:'border-cyan-400/50' }
+  }[type] || { cls:'fa-solid fa-circle-check text-emerald-400', color:'border-emerald-400/50' };
   icon.className = conf.cls;
-  const panel = toast.firstElementChild;
-  if (panel){
-    panel.classList.remove('border-emerald-400/30','border-amber-400/30','border-cyan-400/30');
-    panel.classList.add(conf.border);
-  }
+  toast.querySelector('.toast-body').style.borderColor = '';
+  toast.querySelector('.toast-body').classList.remove('border-emerald-400/50','border-amber-400/50','border-cyan-400/50');
+  toast.querySelector('.toast-body').style.borderColor = 'rgba(6,182,212,.4)';
   msg.textContent = message;
-  toast.classList.remove('opacity-0','translate-y-5');
+  toast.classList.add('show');
   if (toastTimer) clearTimeout(toastTimer);
-  toastTimer = setTimeout(()=>{ toast.classList.add('opacity-0','translate-y-5'); }, 3200);
+  toastTimer = setTimeout(()=>toast.classList.remove('show'), 2800);
 }
 
-// ===== SECTION: LOG =====
+// ===== LOG =====
 function addLog(tag, msg, color){
   const log = $('sim-log');
   if (!log) return;
-
   const span = document.createElement('span');
-  const col = color==='amber'   ? 'text-amber-300'
-            : color==='green'   ? 'text-emerald-300'
-            : color==='fuchsia' ? 'text-fuchsia-300'
-            : 'text-cyan-300';
+  const col = color==='amber' ? 'text-amber-300' : color==='green' ? 'text-emerald-300' : color==='fuchsia' ? 'text-fuchsia-300' : 'text-cyan-300';
   span.className = col;
-  span.textContent = '[' + tag + '] ' + msg;
+  span.textContent = '['+tag+'] '+msg;
   log.appendChild(span);
   log.appendChild(document.createTextNode('\n'));
-
-  // حذف الأسطر القديمة بأمان (كل سطر = span + text node)
-  while (log.childNodes.length > 120){
-    log.removeChild(log.firstChild);
-  }
+  while (log.childNodes.length > 100) log.removeChild(log.firstChild);
   log.scrollTop = log.scrollHeight;
 }
 
-// ===== SECTION: التحميل عبر Uptodown =====
+// ===== VIEW SWITCHING =====
+function switchView(viewName){
+  if (currentView === viewName) return;
+  document.querySelectorAll('.view').forEach(v => {
+    v.classList.toggle('active', v.dataset.view === viewName);
+  });
+  document.querySelectorAll('.nav-item').forEach(b => {
+    b.classList.toggle('active', b.dataset.viewBtn === viewName);
+  });
+  currentView = viewName;
+  // إعادة تعيين التمرير
+  const activeView = document.querySelector('.view.active');
+  if (activeView) activeView.scrollTop = 0;
+  // إخفاء FAB في بعض الشاشات
+  updateFab();
+}
+
+function updateFab(){
+  const fab = $('fab');
+  if (!fab) return;
+  const sel = allPackages.filter(p => p.selected).length;
+  const show = (currentView === 'apps' && sel > 0) || (currentView === 'office' && sel > 0);
+  fab.classList.toggle('show', show);
+  const fc = $('fab-count'); if (fc) fc.textContent = sel;
+}
+
+// ===== DOWNLOAD =====
 function triggerRealDownload(pkg){
   if (!pkg || !pkg.url) return;
-  const url = pkg.url;
-  if (isDirectFile(url)){
+  if (isDirectFile(pkg.url)){
     const a = document.createElement('a');
-    a.href = url;
-    a.rel = 'noopener';
+    a.href = pkg.url; a.rel = 'noopener';
     a.setAttribute('download', pkg.name);
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
   } else {
-    window.open(url, '_blank', 'noopener');
+    window.open(pkg.url, '_blank', 'noopener');
   }
 }
 
 function markDownloaded(pkg){
   downloadedIds.add(pkg.id);
   const sd = $('stat-downloaded'); if (sd) sd.textContent = downloadedIds.size;
-  const so = $('side-opened');     if (so) so.textContent = downloadedIds.size;
 }
 
-function downloadPackage(pkg, cardEl){
+function downloadPackage(pkg){
   triggerRealDownload(pkg);
   markDownloaded(pkg);
-  start3DSimulation(1500);
-  if (cardEl){
-    cardEl.classList.add('downloading');
-    setTimeout(()=>cardEl.classList.remove('downloading'), 1500);
-  }
   if (isUptodown(pkg.url)){
-    showToast('فُتحت صفحة ' + pkg.name + ' على Uptodown — اضغط زر Download');
+    showToast('فُتحت صفحة ' + pkg.name + ' — اضغط Download');
     addLog('OPEN', pkg.name + ' <- uptodown.com', 'green');
   } else {
     showToast('بدأ تحميل ' + pkg.name + ' من ' + hostOf(pkg.url));
-    addLog('DL', pkg.name + ' <- ' + hostOf(pkg.url) + ' (official direct file)', 'green');
+    addLog('DL', pkg.name + ' <- ' + hostOf(pkg.url) + ' (official)', 'green');
   }
 }
 
-function bulkDownload(list, label){
-  if (!list.length){
-    showToast('لم يتم تحديد أي برنامج — حدد برنامجاً واحداً على الأقل', 'warn');
-    return;
-  }
-  start3DSimulation(2500);
-  showToast('سيتم فتح ' + list.length + ' صفحة تحميل (' + label + ') — اسمح بالنوافذ المنبثقة إن طُلب', 'info');
-  addLog('BULK', 'Batch started: ' + list.length + ' packages (' + label + ')', 'cyan');
-
-  // إصلاح: استخدام idx الثابت بدل i المتغير
-  list.forEach((pkg, idx) => {
+function downloadSelected(){
+  const sel = allPackages.filter(p => p.selected);
+  if (!sel.length){ showToast('لم تحدد أي برنامج', 'warn'); return; }
+  showToast('سيتم فتح ' + sel.length + ' صفحة — اسمح بالنوافذ المنبثقة', 'info');
+  addLog('BULK', 'Batch started: ' + sel.length + ' packages', 'cyan');
+  sel.forEach((pkg, idx) => {
     setTimeout(() => {
       triggerRealDownload(pkg);
       markDownloaded(pkg);
-      addLog(isUptodown(pkg.url) ? 'OPEN' : 'DL', (idx + 1) + '. ' + pkg.name, 'green');
-    }, idx * 800);
+      addLog(isUptodown(pkg.url) ? 'OPEN' : 'DL', (idx+1) + '. ' + pkg.name, 'green');
+    }, idx * 700);
   });
-
-  setTimeout(() => {
-    addLog('DONE', 'Batch finished. ' + list.length + ' download pages opened.', 'green');
-  }, list.length * 800 + 600);
+  setTimeout(() => addLog('DONE', 'Batch finished. ' + sel.length + ' pages opened.', 'green'), sel.length * 700 + 500);
 }
 
-// ===== SECTION: CARD RENDERING =====
-function buildCardClasses(isSelected){
-  return 'pkg-card anim-card glass-card relative overflow-hidden rounded-2xl p-5 cursor-pointer select-none flex flex-col gap-3'
-       + (isSelected ? ' card-selected' : ' card-idle');
-}
-function buildCheckIcon(isSelected){
-  return isSelected
-    ? '<i class="fa-solid fa-circle-check text-cyan-300"></i>'
-    : '<i class="fa-regular fa-circle text-slate-600"></i>';
-}
-function sourceChip(url){
-  return isUptodown(url)
-    ? '<span class="src-chip src-uptodown"><i class="fa-solid fa-store"></i>uptodown</span>'
-    : '<span class="src-chip src-official"><i class="fa-solid fa-bolt"></i>رسمي</span>';
-}
-
-function getVisiblePackages(){
-  const q = normalizeArabic(searchQuery);
-  return allPackages.filter(p => {
-    const inCat = currentCategory === 'all' || p.category === currentCategory;
-    if (!inCat) return false;
-    if (!q) return true;
-    return normalizeArabic(p.name).includes(q)
-        || normalizeArabic(p.id).includes(q)
-        || normalizeArabic(p.desc).includes(q);
+function downloadCurrentCategory(){
+  const sel = getVisiblePackages().filter(p => p.selected);
+  if (!sel.length){ showToast('لا توجد برامج محددة في هذا القسم', 'warn'); return; }
+  showToast('سيتم فتح ' + sel.length + ' صفحة (' + (CAT_LABELS[currentCategory] || '') + ')', 'info');
+  sel.forEach((pkg, idx) => {
+    setTimeout(() => {
+      triggerRealDownload(pkg);
+      markDownloaded(pkg);
+      addLog(isUptodown(pkg.url) ? 'OPEN' : 'DL', (idx+1) + '. ' + pkg.name, 'green');
+    }, idx * 700);
   });
 }
 
-function cardHTML(p, i){
-  const badge = p.badge ? '<span class="pkg-badge">'+p.badge+'</span>' : '';
-  const statusCls = p.selected ? 'text-cyan-300' : 'text-slate-500';
-  const statusTxt = p.selected ? 'مُحدد' : 'انقر للتحديد';
-  return '<div class="'+buildCardClasses(p.selected)+'" data-id="'+p.id+'" style="animation-delay:'+Math.min(i*30,330)+'ms">'
-    + '<div class="flex items-start justify-between gap-3">'
-      + '<div class="w-11 h-11 rounded-xl flex items-center justify-center text-xl '+p.color+' bg-white/5 border border-white/10 icon-glow shrink-0"><i class="'+p.icon+'"></i></div>'
-      + '<span class="check-slot text-2xl leading-none transition-all">'+buildCheckIcon(p.selected)+'</span>'
-    + '</div>'
-    + '<div class="flex items-center gap-2 flex-wrap"><h3 class="font-extrabold text-[15px] text-white leading-snug">'+p.name+'</h3>'+badge+'</div>'
-    + '<p class="text-slate-400 text-[12.5px] leading-relaxed min-h-[40px]">'+p.desc+'</p>'
-    + '<div class="mt-auto pt-3 border-t border-white/5 flex items-center justify-between gap-2" dir="ltr">'
-      + '<div class="flex items-center gap-2 min-w-0">'+sourceChip(p.url)+'<code class="mono text-[10px] text-slate-500 truncate" title="'+p.id+'">'+p.id+'</code></div>'
-      + '<span class="card-status text-[10.5px] font-extrabold shrink-0 '+statusCls+'" dir="rtl">'+statusTxt+'</span>'
-    + '</div>'
-  + '</div>';
-}
-
-function attachTilt(card){
-  card.addEventListener('mousemove', function(e){
-    const r = card.getBoundingClientRect();
-    const px = (e.clientX - r.left) / r.width;
-    const py = (e.clientY - r.top) / r.height;
-    const rx = (0.5 - py) * 16;
-    const ry = (px - 0.5) * -16;
-    card.style.transitionDuration = '0.06s';
-    card.style.transform = 'perspective(900px) rotateX(' + rx.toFixed(2) + 'deg) rotateY(' + ry.toFixed(2) + 'deg) translateY(-4px)';
-  });
-  card.addEventListener('mouseleave', function(){
-    card.style.transitionDuration = '';
-    card.style.transform = '';
-  });
-}
-
-function renderCards(){
-  const grid = $('cards-grid');
-  if (!grid) return;
-  const y = window.scrollY;
-  const list = getVisiblePackages();
-  const gc = $('grid-count');
-  if (gc) gc.textContent = 'عرض ' + list.length + ' من ' + allPackages.length + ' حزمة';
-
-  if (!list.length){
-    grid.innerHTML = '<div class="col-span-full glass-card rounded-2xl p-12 text-center">'
-      + '<i class="fa-solid fa-magnifying-glass text-3xl text-slate-600 mb-3"></i>'
-      + '<p class="font-bold text-slate-400">لا توجد نتائج مطابقة — جرّب كلمة بحث أخرى</p></div>';
-  } else {
-    // إصلاح: تمرير الفهرس بأمان
-    grid.innerHTML = list.map((p, i) => cardHTML(p, i)).join('');
-    grid.querySelectorAll('.pkg-card').forEach(card => {
-      const id = card.getAttribute('data-id');
-      card.addEventListener('click', function(e){
-        e.preventDefault(); e.stopPropagation();
-        handleCardClick(id, card);
-      });
-      attachTilt(card);
-    });
-  }
-  window.scrollTo(0, y);
-}
-
-function updateSingleCard(id){
-  const card = document.querySelector('.pkg-card[data-id="'+id+'"]');
-  const pkg  = allPackages.find(p => p.id === id);
-  if (!card || !pkg) return;
-
-  card.className = buildCardClasses(pkg.selected);
-  const slot = card.querySelector('.check-slot');
-  if (slot) slot.innerHTML = buildCheckIcon(pkg.selected);
-  const st = card.querySelector('.card-status');
-  if (st){
-    st.textContent = pkg.selected ? 'مُحدد' : 'انقر للتحديد';
-    st.className = 'card-status text-[10.5px] font-extrabold shrink-0 ' + (pkg.selected ? 'text-cyan-300' : 'text-slate-500');
-  }
-}
-
-// إصلاح: النقر على البطاقة = تحديد/إلغاء تحديد فقط (لا يفتح تحميلاً)
-function handleCardClick(pkgId, cardEl){
-  const pkg = allPackages.find(p => p.id === pkgId);
-  if (!pkg) return;
-  pkg.selected = !pkg.selected;
-  updateSingleCard(pkgId);
-  refreshQueueAndStats();
-
-  if (pkg.selected){
-    showToast('أُضيف ' + pkg.name + ' إلى قائمة التحميل');
-    addLog('SELECT', 'Added to queue: ' + pkg.name, 'green');
-  } else {
-    showToast('أُلغي تحديد ' + pkg.name, 'info');
-    addLog('SELECT', 'Removed from queue: ' + pkg.name, 'amber');
-  }
-  // ملاحظة: فتح صفحة التحميل يتم من زر التحميل في القائمة أو "تحميل الكل"
-}
-
-// ===== SECTION: رقائق قسم الأوفيس =====
-function renderOfficeChips(){
-  const wrap = $('office-chips');
-  if (!wrap) return;
-  const officePkgs = allPackages.filter(p => p.category === 'office');
-  wrap.innerHTML = officePkgs.map(p =>
-      '<button type="button" class="office-chip glass-card rounded-xl px-3.5 py-3 flex items-center gap-3 text-start cursor-pointer" data-id="'+p.id+'">'
-    +   '<div class="w-10 h-10 rounded-lg flex items-center justify-center text-lg '+p.color+' bg-white/5 border border-white/10 shrink-0"><i class="'+p.icon+'"></i></div>'
-    +   '<div class="flex-1 min-w-0">'
-    +     '<p class="text-[13px] font-extrabold text-white truncate">'+p.name+'</p>'
-    +     '<div class="mt-1" dir="ltr">'+sourceChip(p.url)+'</div>'
-    +   '</div>'
-    +   '<i class="fa-solid fa-arrow-up-right-from-square text-slate-500 text-xs shrink-0"></i>'
-    + '</button>'
-  ).join('');
-
-  wrap.querySelectorAll('.office-chip').forEach(chip => {
-    chip.addEventListener('click', function(e){
-      e.preventDefault();
-      const pkg = allPackages.find(p => p.id === chip.getAttribute('data-id'));
-      if (pkg) downloadPackage(pkg, null);
-    });
-  });
-}
-
-// ===== SECTION: قائمة التحميل =====
-function queueRowHTML(p){
-  return '<div class="q-row glass-card rounded-xl p-3 flex items-center gap-3" data-id="'+p.id+'">'
-    + '<div class="w-9 h-9 rounded-lg flex items-center justify-center text-base '+p.color+' bg-white/5 border border-white/10 shrink-0"><i class="'+p.icon+'"></i></div>'
-    + '<div class="flex-1 min-w-0">'
-      + '<p class="text-sm font-extrabold text-white truncate">'+p.name+'</p>'
-      + '<p class="mono text-[10px] text-slate-500 truncate" dir="ltr" title="'+p.url+'">'+hostOf(p.url)+'</p>'
-    + '</div>'
-    + sourceChip(p.url)
-    + '<button type="button" class="q-dl w-9 h-9 rounded-lg btn-ghost text-cyan-300 flex items-center justify-center cursor-pointer shrink-0" title="فتح التحميل"><i class="fa-solid fa-circle-down"></i></button>'
-    + '<button type="button" class="q-del w-9 h-9 rounded-lg btn-ghost text-rose-400/80 flex items-center justify-center cursor-pointer shrink-0" title="إزالة من القائمة"><i class="fa-solid fa-xmark"></i></button>'
-  + '</div>';
-}
-
-function renderQueue(){
+function copySelectedLinks(){
   const sel = allPackages.filter(p => p.selected);
-  const box = $('queue-list');
-  if (!box) return;
-
-  const qc = $('queue-count');
-  if (qc) qc.textContent = sel.length + ' برنامج';
-
-  if (!sel.length){
-    box.innerHTML = '<div class="text-center py-14">'
-      + '<i class="fa-solid fa-inbox text-3xl text-slate-600 mb-3"></i>'
-      + '<p class="font-bold text-slate-400 text-sm">القائمة فارغة — انقر على البطاقات لإضافة برامجك</p></div>';
-    return;
-  }
-
-  box.innerHTML = sel.map(queueRowHTML).join('');
-  box.querySelectorAll('.q-row').forEach(row => {
-    const id  = row.getAttribute('data-id');
-    const pkg = allPackages.find(p => p.id === id);
-    if (!pkg) return;
-
-    const dlBtn  = row.querySelector('.q-dl');
-    const delBtn = row.querySelector('.q-del');
-
-    if (dlBtn) dlBtn.addEventListener('click', function(e){
-      e.preventDefault(); e.stopPropagation();
-      downloadPackage(pkg, null);
-    });
-    if (delBtn) delBtn.addEventListener('click', function(e){
-      e.preventDefault(); e.stopPropagation();
-      pkg.selected = false;
-      updateSingleCard(id);
-      refreshQueueAndStats();
-      showToast('أُزيل ' + pkg.name + ' من قائمة التحميل', 'info');
-      addLog('SELECT', 'Removed from queue: ' + pkg.name, 'amber');
-    });
-  });
-}
-
-function refreshQueueAndStats(){
-  const sel = allPackages.filter(p => p.selected);
-  const ss = $('stat-selected'); if (ss) ss.textContent = sel.length + ' / ' + allPackages.length;
-  const side = $('side-selected'); if (side) side.textContent = sel.length;
-  renderQueue();
-}
-
-// ===== SECTION: SELECTION / FILTERS =====
-function selectAllApps(state){
-  allPackages.forEach(p => p.selected = state);
-  renderCards();
-  refreshQueueAndStats();
-  showToast(state ? 'تم تحديد جميع البرامج (' + allPackages.length + ')' : 'تم إلغاء تحديد جميع البرامج', state ? 'ok' : 'info');
-  addLog('SELECT', state ? 'Queue filled: all ' + allPackages.length + ' packages' : 'Queue cleared', state ? 'green' : 'amber');
-}
-
-function filterCategory(cat){
-  currentCategory = cat;
-  document.querySelectorAll('.cat-tab').forEach(t => t.classList.toggle('cat-active', t.dataset.cat === cat));
-  renderCards();
-}
-
-function toggleCurrentCategorySelection(){
-  const list = getVisiblePackages();
-  if (!list.length){ showToast('لا توجد حزم في هذا العرض', 'warn'); return; }
-  const allSel = list.every(p => p.selected);
-  list.forEach(p => p.selected = !allSel);
-  renderCards();
-  refreshQueueAndStats();
-  const label = CAT_LABELS[currentCategory] || 'الكل';
-  showToast((allSel ? 'تم إلغاء تحديد قسم: ' : 'تم تحديد قسم: ') + label + ' (' + list.length + ')');
-  addLog('SELECT', (allSel ? 'Deselected section: ' : 'Selected section: ') + label + ' [' + list.length + ']', allSel ? 'amber' : 'green');
-}
-
-function copyAllLinks(){
-  const sel = allPackages.filter(p => p.selected);
-  if (!sel.length){ showToast('لم يتم تحديد أي برنامج', 'warn'); return; }
+  if (!sel.length){ showToast('لم تحدد أي برنامج', 'warn'); return; }
   const txt = sel.map(p => p.name + '  ->  ' + p.url).join('\n');
   const done = () => {
-    showToast('تم نسخ ' + sel.length + ' رابطاً إلى الحافظة');
+    showToast('تم نسخ ' + sel.length + ' رابطاً');
     addLog('CLIP', sel.length + ' links copied', 'cyan');
   };
   if (navigator.clipboard && window.isSecureContext){
@@ -1059,218 +1120,267 @@ function fallbackCopy(txt){
   document.body.removeChild(ta);
 }
 
-// ===== SECTION: القائمة الجانبية =====
-function closeSidebarOnMobile(){
-  if (window.innerWidth >= 1024) return;
-  const sb = $('sidebar');
-  const ov = $('side-overlay');
-  const ic = $('side-toggle-icon');
-  if (sb) sb.classList.remove('open');
-  if (ov) ov.classList.add('hidden');
-  if (ic) ic.className = 'fa-solid fa-bars';
-}
-function scrollToSection(id){
-  const el = $(id);
-  if (el) el.scrollIntoView({ behavior:'smooth', block:'start' });
-}
-function setActiveSideLink(btn){
-  document.querySelectorAll('#side-nav .side-link').forEach(l => l.classList.remove('active'));
-  if (btn) btn.classList.add('active');
+// ===== APP CARD RENDERING =====
+function appCardHTML(p){
+  const badge = p.badge ? '<span class="chip chip-amber">'+p.badge+'</span>' : '';
+  const src = isUptodown(p.url)
+    ? '<span class="chip chip-cyan"><i class="fa-solid fa-store"></i>uptodown</span>'
+    : '<span class="chip chip-violet"><i class="fa-solid fa-bolt"></i>رسمي</span>';
+  const checkCls = p.selected ? 'app-check on' : 'app-check off';
+  const checkIcon = p.selected
+    ? '<i class="fa-solid fa-circle-check"></i>'
+    : '<i class="fa-regular fa-circle"></i>';
+  return '<div class="app-card ' + (p.selected ? 'selected' : '') + '" data-id="'+p.id+'">'
+    + '<div class="app-icon '+p.color+'"><i class="'+p.icon+'"></i></div>'
+    + '<div class="app-info">'
+      + '<div class="app-name">'+p.name+' '+badge+'</div>'
+      + '<div class="app-desc">'+p.desc+'</div>'
+      + '<div class="mt-1 flex items-center gap-1.5">'+src+'</div>'
+    + '</div>'
+    + '<div class="'+checkCls+'">'+checkIcon+'</div>'
+  + '</div>';
 }
 
-// =====================================================================
-// SECTION: THREE.JS SCENE (مع حماية من فشل CDN)
-// =====================================================================
-let scene, camera, renderer, coreMesh, outerRing, particlesMesh;
-let mouseX = 0, mouseY = 0;
+function getVisiblePackages(){
+  const q = normalizeArabic(searchQuery);
+  return allPackages.filter(p => {
+    const inCat = currentCategory === 'all' || p.category === currentCategory;
+    if (!inCat) return false;
+    if (!q) return true;
+    return normalizeArabic(p.name).includes(q) || normalizeArabic(p.id).includes(q) || normalizeArabic(p.desc).includes(q);
+  });
+}
 
-const CORE_SHAPES = [
-  { name:'العشروني Icosahedron',      make:() => new THREE.IcosahedronGeometry(7.5, 1) },
-  { name:'العقدة الحلقية Torus Knot', make:() => new THREE.TorusKnotGeometry(5.4, 1.35, 220, 24) },
-  { name:'الاثنا عشري Dodecahedron',  make:() => new THREE.DodecahedronGeometry(7.5, 0) }
-];
-
-function initThreeJS(){
-  if (typeof THREE === 'undefined'){
-    console.warn('[3D] Three.js not loaded — skipping background scene.');
+function renderAppList(){
+  const list = $('app-list');
+  if (!list) return;
+  const visible = getVisiblePackages();
+  const gc = $('grid-count');
+  if (gc) gc.textContent = 'عرض ' + visible.length + ' من ' + allPackages.length;
+  if (!visible.length){
+    list.innerHTML = '<div class="empty-state"><i class="fa-solid fa-magnifying-glass"></i><p>لا توجد نتائج — جرّب بحثاً آخر</p></div>';
     return;
   }
+  list.innerHTML = visible.map(appCardHTML).join('');
+  list.querySelectorAll('.app-card').forEach(card => {
+    card.addEventListener('click', () => handleCardClick(card.getAttribute('data-id')));
+  });
+}
+
+function handleCardClick(id){
+  const pkg = allPackages.find(p => p.id === id);
+  if (!pkg) return;
+  pkg.selected = !pkg.selected;
+  refreshAll();
+  showToast(pkg.selected ? 'أُضيف ' + pkg.name : 'أُلغي ' + pkg.name, pkg.selected ? 'ok' : 'info');
+  addLog('SELECT', (pkg.selected ? 'Added: ' : 'Removed: ') + pkg.name, pkg.selected ? 'green' : 'amber');
+}
+
+// ===== OFFICE LIST =====
+function renderOfficeList(){
+  const list = $('office-list');
+  if (!list) return;
+  const officePkgs = allPackages.filter(p => p.category === 'office');
+  list.innerHTML = officePkgs.map(appCardHTML).join('');
+  list.querySelectorAll('.app-card').forEach(card => {
+    card.addEventListener('click', () => handleCardClick(card.getAttribute('data-id')));
+  });
+}
+
+// ===== QUEUE =====
+function queueRowHTML(p){
+  const src = isUptodown(p.url)
+    ? '<span class="chip chip-cyan"><i class="fa-solid fa-store"></i></span>'
+    : '<span class="chip chip-violet"><i class="fa-solid fa-bolt"></i></span>';
+  return '<div class="app-card" data-id="'+p.id+'" style="padding:10px 12px;">'
+    + '<div class="app-icon '+p.color+'" style="width:36px;height:36px;font-size:16px;"><i class="'+p.icon+'"></i></div>'
+    + '<div class="app-info">'
+      + '<div class="app-name" style="font-size:12px;">'+p.name+'</div>'
+      + '<div class="app-desc mono" style="font-size:9.5px;" dir="ltr">'+hostOf(p.url)+'</div>'
+    + '</div>'
+    + src
+    + '<button type="button" class="q-dl" style="width:32px;height:32px;border-radius:9px;border:1px solid rgba(6,182,212,.3);background:rgba(6,182,212,.08);color:#67e8f9;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;" title="تحميل"><i class="fa-solid fa-circle-down" style="font-size:13px;"></i></button>'
+    + '<button type="button" class="q-del" style="width:32px;height:32px;border-radius:9px;border:1px solid rgba(244,63,94,.3);background:rgba(244,63,94,.08);color:#fb7185;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;" title="حذف"><i class="fa-solid fa-xmark" style="font-size:13px;"></i></button>'
+  + '</div>';
+}
+
+function renderQueue(){
+  const sel = allPackages.filter(p => p.selected);
+  const box = $('queue-list');
+  const qc = $('queue-count');
+  if (qc) qc.textContent = sel.length;
+  if (!box) return;
+  if (!sel.length){
+    box.innerHTML = '<div class="empty-state"><i class="fa-solid fa-inbox"></i><p>القائمة فارغة</p></div>';
+    return;
+  }
+  box.innerHTML = sel.map(queueRowHTML).join('');
+  box.querySelectorAll('.app-card').forEach(row => {
+    const id = row.getAttribute('data-id');
+    const pkg = allPackages.find(p => p.id === id);
+    if (!pkg) return;
+    row.querySelector('.q-dl').addEventListener('click', (e) => { e.stopPropagation(); downloadPackage(pkg); });
+    row.querySelector('.q-del').addEventListener('click', (e) => {
+      e.stopPropagation();
+      pkg.selected = false;
+      refreshAll();
+      showToast('أُزيل ' + pkg.name, 'info');
+    });
+  });
+}
+
+// ===== REFRESH ALL =====
+function refreshAll(){
+  const sel = allPackages.filter(p => p.selected);
+  const ss = $('stat-selected'); if (ss) ss.textContent = sel.length;
+  const nav = $('nav-download-badge'); if (nav) nav.textContent = sel.length;
+  const badge = $('queue-badge'); if (badge) badge.textContent = sel.length;
+  renderAppList();
+  renderOfficeList();
+  renderQueue();
+  updateFab();
+}
+
+// ===== SELECT / FILTER =====
+function selectAllApps(state){
+  allPackages.forEach(p => p.selected = state);
+  refreshAll();
+  showToast(state ? 'حُدد الكل (' + allPackages.length + ')' : 'أُلغي التحديد', state ? 'ok' : 'info');
+}
+
+function filterCategory(cat){
+  currentCategory = cat;
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.toggle('active', c.dataset.cat === cat));
+  renderAppList();
+  updateFab();
+}
+
+function toggleCurrentCategorySelection(){
+  const list = getVisiblePackages();
+  if (!list.length){ showToast('لا برامج في هذا القسم', 'warn'); return; }
+  const allSel = list.every(p => p.selected);
+  list.forEach(p => p.selected = !allSel);
+  refreshAll();
+  showToast((allSel ? 'أُلغي ' : 'حُدد ') + (CAT_LABELS[currentCategory] || 'الكل'));
+}
+
+// ===== HOME CATEGORIES =====
+function renderHomeCats(){
+  const wrap = $('home-cats');
+  if (!wrap) return;
+  const cats = ['general', 'dev', 'python', 'drivers'];
+  wrap.innerHTML = cats.map(c => {
+    const meta = CAT_META[c];
+    const count = allPackages.filter(p => p.category === c).length;
+    return '<button class="glass-card rounded-2xl p-3 flex items-center gap-2.5 text-start active:scale-95 transition-transform" onclick="switchView(\'apps\'); filterCategory(\'' + c + '\');">'
+      + '<div class="w-9 h-9 rounded-lg '+meta.bg+' '+meta.border+' border flex items-center justify-center '+meta.color+' text-sm"><i class="'+meta.icon+'"></i></div>'
+      + '<div class="flex-1 min-w-0">'
+        + '<p class="text-[12px] font-black text-white">'+CAT_LABELS[c]+'</p>'
+        + '<p class="text-[10px] text-slate-500 font-bold mono">'+count+' برنامج</p>'
+      + '</div>'
+    + '</button>';
+  }).join('');
+}
+
+// ===== THREE.JS BACKGROUND =====
+let scene, camera, renderer, coreMesh, outerRing, particlesMesh;
+let mouseX = 0, mouseY = 0;
+let warpTimer = null, warpSpeed = false;
+
+function initThreeJS(){
+  if (typeof THREE === 'undefined'){ console.warn('[3D] not loaded'); return; }
   try {
     const canvas = $('bg-canvas');
     if (!canvas) return;
-
     scene = new THREE.Scene();
-    camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 300);
+    camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 300);
     camera.position.z = 26;
-
-    renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+    renderer = new THREE.WebGLRenderer({ canvas, alpha:true, antialias:true });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setSize(window.innerWidth, window.innerHeight);
 
     coreMesh = new THREE.Mesh(
-      CORE_SHAPES[0].make(),
-      new THREE.MeshBasicMaterial({ color: 0x22d3ee, wireframe: true, transparent: true, opacity: 0.22 })
+      new THREE.IcosahedronGeometry(7.5, 1),
+      new THREE.MeshBasicMaterial({ color:0x22d3ee, wireframe:true, transparent:true, opacity:0.18 })
     );
     scene.add(coreMesh);
 
     outerRing = new THREE.Mesh(
       new THREE.TorusGeometry(12.5, 0.08, 16, 100),
-      new THREE.MeshBasicMaterial({ color: 0xd946ef, transparent: true, opacity: 0.35 })
+      new THREE.MeshBasicMaterial({ color:0xd946ef, transparent:true, opacity:0.3 })
     );
     outerRing.rotation.x = Math.PI / 2.6;
     scene.add(outerRing);
 
-    const positions = new Float32Array(900 * 3);
+    const positions = new Float32Array(600 * 3);
     for (let i = 0; i < positions.length; i++) positions[i] = (Math.random() - 0.5) * 75;
     const pGeo = new THREE.BufferGeometry();
     pGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    particlesMesh = new THREE.Points(pGeo, new THREE.PointsMaterial({ color: 0x67e8f9, size: 0.07, transparent: true, opacity: 0.55 }));
+    particlesMesh = new THREE.Points(pGeo, new THREE.PointsMaterial({ color:0x67e8f9, size:0.08, transparent:true, opacity:0.5 }));
     scene.add(particlesMesh);
 
-    window.addEventListener('mousemove', function(e){
-      mouseX =  (e.clientX / window.innerWidth)  * 2 - 1;
+    window.addEventListener('mousemove', e => {
+      mouseX = (e.clientX / window.innerWidth) * 2 - 1;
       mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
     });
-    window.addEventListener('resize', function(){
+    window.addEventListener('resize', () => {
       if (!camera || !renderer) return;
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(window.innerWidth, window.innerHeight);
     });
-
     animate3D();
-  } catch(err){
-    console.error('[3D] Failed to init:', err);
-  }
+  } catch(err){ console.error('[3D]', err); }
 }
 
 function animate3D(){
   if (!renderer || !scene || !camera) return;
   requestAnimationFrame(animate3D);
-  const f = warpSpeed3D ? 5.5 : 1;
-  if (coreMesh){
-    coreMesh.rotation.y += 0.0018 * f;
-    coreMesh.rotation.x += 0.0006 * f;
-  }
-  if (outerRing){
-    outerRing.rotation.z += 0.0012 * f;
-    outerRing.rotation.y += 0.0004 * f;
-  }
-  if (particlesMesh){
-    particlesMesh.rotation.y += 0.00035 * f;
-    particlesMesh.rotation.x += 0.00012 * f;
-  }
-  camera.position.x += (mouseX * 3.2 - camera.position.x) * 0.05;
-  camera.position.y += (-mouseY * 2.2 - camera.position.y) * 0.05;
+  const f = warpSpeed ? 5.5 : 1;
+  if (coreMesh){ coreMesh.rotation.y += 0.0018 * f; coreMesh.rotation.x += 0.0006 * f; }
+  if (outerRing){ outerRing.rotation.z += 0.0012 * f; outerRing.rotation.y += 0.0004 * f; }
+  if (particlesMesh){ particlesMesh.rotation.y += 0.00035 * f; particlesMesh.rotation.x += 0.00012 * f; }
+  camera.position.x += (mouseX * 3 - camera.position.x) * 0.05;
+  camera.position.y += (-mouseY * 2 - camera.position.y) * 0.05;
   camera.lookAt(scene.position);
   renderer.render(scene, camera);
 }
 
-function toggle3DWireframe(){
-  if (!coreMesh){
-    showToast('المشهد ثلاثي الأبعاد غير متاح حالياً', 'warn');
-    return;
-  }
-  coreShapeIndex = (coreShapeIndex + 1) % CORE_SHAPES.length;
-  coreMesh.geometry.dispose();
-  coreMesh.geometry = CORE_SHAPES[coreShapeIndex].make();
-  showToast('شكل النواة الجديد: ' + CORE_SHAPES[coreShapeIndex].name, 'info');
-  addLog('3D', 'Core shape -> ' + CORE_SHAPES[coreShapeIndex].name, 'cyan');
-}
-
 function start3DSimulation(ms){
-  warpSpeed3D = true;
+  warpSpeed = true;
   if (warpTimer) clearTimeout(warpTimer);
-  warpTimer = setTimeout(()=>{ warpSpeed3D = false; warpTimer = null; }, ms || 2000);
+  warpTimer = setTimeout(()=>{ warpSpeed = false; warpTimer = null; }, ms || 2000);
 }
 
-// =====================================================================
-// SECTION: INIT & EVENT BINDING
-// =====================================================================
-document.addEventListener('DOMContentLoaded', function(){
+// ===== INIT =====
+document.addEventListener('DOMContentLoaded', () => {
   initThreeJS();
-  renderCards();
-  renderOfficeChips();
-  refreshQueueAndStats();
+  renderHomeCats();
+  refreshAll();
+  updateFab();
 
-  // تبويبات التصنيف
-  document.querySelectorAll('.cat-tab').forEach(tab => {
-    tab.addEventListener('click', function(){ filterCategory(tab.dataset.cat); });
+  // Bottom nav
+  document.querySelectorAll('.nav-item').forEach(btn => {
+    btn.addEventListener('click', () => switchView(btn.dataset.viewBtn));
   });
 
-  // البحث
-  const searchInput = $('search-input');
-  if (searchInput){
-    searchInput.addEventListener('input', function(e){
-      searchQuery = e.target.value.trim();
-      renderCards();
-    });
-  }
+  // App bar buttons
+  const btnQueue = $('btn-queue');
+  if (btnQueue) btnQueue.addEventListener('click', () => switchView('downloads'));
 
-  // زر عكس تحديد القسم
-  const invertBtn = $('invert-cat-btn');
-  if (invertBtn) invertBtn.addEventListener('click', toggleCurrentCategorySelection);
+  const btnInfo = $('btn-info');
+  if (btnInfo) btnInfo.addEventListener('click', () => switchView('developer'));
 
-  // أزرار التحميل الجماعي
-  const dlAll = $('download-all-btn');
-  if (dlAll) dlAll.addEventListener('click', function(){
-    bulkDownload(allPackages.filter(p => p.selected), 'كل المحدد');
+  // Search
+  const si = $('search-input');
+  if (si) si.addEventListener('input', e => { searchQuery = e.target.value.trim(); renderAppList(); });
+
+  // Filter chips
+  document.querySelectorAll('.filter-chip').forEach(c => {
+    c.addEventListener('click', () => filterCategory(c.dataset.cat));
   });
 
-  const dlCat = $('download-cat-btn');
-  if (dlCat) dlCat.addEventListener('click', function(){
-    bulkDownload(getVisiblePackages().filter(p => p.selected), CAT_LABELS[currentCategory]);
-  });
-
-  const copyBtn = $('copy-links-btn');
-  if (copyBtn) copyBtn.addEventListener('click', copyAllLinks);
-
-  // زر عرض الأوفيس في الشبكة
-  const officeBtn = $('office-browse-btn');
-  if (officeBtn) officeBtn.addEventListener('click', function(){
-    filterCategory('office');
-    scrollToSection('apps');
-    addLog('NAV', 'Filtered grid -> Office packages', 'cyan');
-  });
-
-  // روابط التنقل في القائمة الجانبية
-  document.querySelectorAll('#side-nav .side-link[data-target]').forEach(btn => {
-    btn.addEventListener('click', function(){
-      setActiveSideLink(btn);
-      scrollToSection(btn.dataset.target);
-      closeSidebarOnMobile();
-    });
-  });
-
-  // روابط الأقسام السريعة
-  document.querySelectorAll('#side-nav .side-cat').forEach(btn => {
-    btn.addEventListener('click', function(){
-      filterCategory(btn.dataset.cat);
-      document.querySelectorAll('#side-nav .side-link').forEach(l => l.classList.remove('active'));
-      btn.classList.add('active');
-      scrollToSection('apps');
-      closeSidebarOnMobile();
-      addLog('NAV', 'Filtered grid -> ' + (CAT_LABELS[btn.dataset.cat] || ''), 'cyan');
-    });
-  });
-
-  // زر فتح/إغلاق القائمة الجانبية (موبايل)
-  const sideToggle = $('side-toggle');
-  if (sideToggle) sideToggle.addEventListener('click', function(){
-    const sb = $('sidebar');
-    const ov = $('side-overlay');
-    const ic = $('side-toggle-icon');
-    if (!sb) return;
-    const open = !sb.classList.contains('open');
-    sb.classList.toggle('open', open);
-    if (ov) ov.classList.toggle('hidden', !open);
-    if (ic) ic.className = open ? 'fa-solid fa-xmark' : 'fa-solid fa-bars';
-  });
-
-  const overlay = $('side-overlay');
-  if (overlay) overlay.addEventListener('click', closeSidebarOnMobile);
-
-  addLog('READY', 'Loaded ' + allPackages.length + ' packages - powered by Uptodown (Office suite included).', 'green');
+  addLog('READY', 'App v6.0 loaded - 48 packages.', 'green');
 });
 </script>
 </body>
