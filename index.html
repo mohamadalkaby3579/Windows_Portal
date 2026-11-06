@@ -15,7 +15,7 @@
 
 <style>
 /* =====================================================
-   CUSTOM DESIGN SYSTEM — Dark Glassmorphism v5.1 (Uptodown + Sidebar + Office)
+   CUSTOM DESIGN SYSTEM — Dark Glassmorphism v5.2 (Uptodown + Sidebar + Office)
 ===================================================== */
 html{ scroll-behavior:smooth; }
 body{
@@ -176,8 +176,8 @@ body{
       <i class="fa-solid fa-cube"></i>
     </div>
     <div class="min-w-0">
-      <p class="font-black text-white text-sm leading-tight" ></p>بوابة الويندوز</p>
-      <p class="mono text-[10px] text-slate-500">v5.1 — Uptodown</p>
+      <p class="font-black text-white text-sm leading-tight">بوابة الويندوز</p>
+      <p class="mono text-[10px] text-slate-500">v5.2 — Uptodown</p>
     </div>
   </div>
 
@@ -254,7 +254,7 @@ body{
 <div id="side-overlay" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-30 hidden lg:hidden"></div>
 
 <!-- =====================================================
-     المحتوى الرئيسي (يُزاح عن يمين القائمة في الشاشات الكبيرة)
+     المحتوى الرئيسي
 ====================================================== -->
 <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 pb-16 lg:pr-4" id="main-wrap">
 
@@ -310,7 +310,7 @@ body{
           </div>
           <div>
             <p class="text-[11px] text-slate-400 font-bold">مصدر التحميل</p>
-            <p id="stat-sources" class="text-lg font-extrabold text-violet-300">Uptodown</p>
+            <p class="text-lg font-extrabold text-violet-300">Uptodown</p>
           </div>
         </div>
       </div>
@@ -384,7 +384,7 @@ body{
   </section>
 
   <!-- =====================================================
-       قسم الأوفيس الجديد — كل نسخ Microsoft Office
+       قسم الأوفيس الجديد
   ====================================================== -->
   <section class="mt-12" id="office">
     <div class="flex items-center gap-3 mb-5">
@@ -397,10 +397,10 @@ body{
       <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-l from-transparent via-blue-400/50 to-transparent"></div>
       <div class="flex flex-col lg:flex-row gap-7">
 
-        <!-- اليمين: النسخ -->
+        <!-- النسخ -->
         <div class="flex-1">
           <div class="flex items-center gap-3 mb-5">
-            <div class="w-13 h-13 p-3 rounded-2xl bg-blue-500/15 border border-blue-400/30 flex items-center justify-center text-blue-300 text-2xl icon-glow shrink-0">
+            <div class="w-12 h-12 p-3 rounded-2xl bg-blue-500/15 border border-blue-400/30 flex items-center justify-center text-blue-300 text-2xl icon-glow shrink-0">
               <i class="fa-brands fa-microsoft"></i>
             </div>
             <div>
@@ -412,7 +412,7 @@ body{
           <div id="office-chips" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5"></div>
         </div>
 
-        <!-- اليسار: إرشادات الترخيص القانونية -->
+        <!-- إرشادات الترخيص -->
         <div class="lg:w-80 shrink-0 rounded-2xl border border-emerald-400/25 bg-emerald-400/[0.05] p-5 flex flex-col">
           <h4 class="font-black text-emerald-300 text-sm flex items-center gap-2 mb-3">
             <i class="fa-solid fa-key"></i>
@@ -519,19 +519,31 @@ body{
   </section>
 
   <!-- =====================================================
-       قسم المطوّر والتواصل
+       قسم المطوّر والتواصل (مُعاد بناؤه بالكامل)
   ====================================================== -->
-<!-- Avatar -->
-<div class="relative shrink-0">
-  <div class="w-20 h-20 rounded-3xl overflow-hidden bg-gradient-to-br from-emerald-500/25 to-cyan-600/25 border border-emerald-400/40 flex items-center justify-center">
-    <img src="1.jpg" 
-         alt="صورة المطور" 
-         class="w-full h-full object-cover" />
-  </div>
-  <span class="absolute -bottom-1.5 -left-1.5 w-6 h-6 rounded-full bg-emerald-500 border-2 border-slate-900 flex items-center justify-center text-[10px] text-white">
-    <i class="fa-solid fa-check"></i>
-  </span>
-</div>
+  <section class="mt-16" id="developer">
+    <div class="flex items-center gap-3 mb-5">
+      <span class="step-chip mono">STEP 04</span>
+      <h2 class="text-lg sm:text-xl font-extrabold text-white">المطوّر والتواصل</h2>
+      <div class="flex-1 h-px bg-gradient-to-l from-white/10 to-transparent"></div>
+    </div>
+
+    <div class="glass-panel rounded-3xl p-6 sm:p-8 relative overflow-hidden">
+      <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-l from-transparent via-emerald-400/50 to-transparent"></div>
+
+      <div class="flex flex-col sm:flex-row items-center gap-6">
+
+        <!-- Avatar -->
+        <div class="relative shrink-0">
+          <div class="w-20 h-20 rounded-3xl overflow-hidden bg-gradient-to-br from-emerald-500/25 to-cyan-600/25 border border-emerald-400/40 flex items-center justify-center">
+            <img src="1.jpg" alt="صورة المطور"
+                 class="w-full h-full object-cover"
+                 onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fa-solid fa-user-tie text-3xl text-emerald-300\'></i>';" />
+          </div>
+          <span class="absolute -bottom-1.5 -left-1.5 w-6 h-6 rounded-full bg-emerald-500 border-2 border-slate-900 flex items-center justify-center text-[10px] text-white">
+            <i class="fa-solid fa-check"></i>
+          </span>
+        </div>
 
         <!-- المعلومات -->
         <div class="flex-1 text-center sm:text-start min-w-0">
@@ -541,7 +553,9 @@ body{
             <i class="fa-solid fa-location-dot text-rose-400"></i>
             العراق — البصرة
           </p>
-     <p class="text-slate-500 text-[12px] mt-2.5 leading-relaxed">لطلب برامج جديدة، الإبلاغ عن رابط، أو اقتراحات التطوير — تواصل معي </p> 
+          <p class="text-slate-500 text-[12px] mt-2.5 leading-relaxed">
+            لطلب برامج جديدة، الإبلاغ عن رابط، أو اقتراحات التطوير — تواصل معي
+          </p>
         </div>
 
         <!-- أزرار التواصل -->
@@ -564,9 +578,9 @@ body{
   <!-- ===== FOOTER ===== -->
   <footer class="mt-16 glass-panel rounded-2xl px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-4 text-center">
     <p class="text-sm text-slate-400 font-bold">
-      المدير الشامل <span class="text-cyan-300">v5.1</span> &bull; تطوير <span class="text-emerald-300">محمد صلاح</span> &bull; التحميل عبر Uptodown
+      المدير الشامل <span class="text-cyan-300">v5.2</span> &bull; تطوير <span class="text-emerald-300">محمد صلاح</span> &bull; التحميل عبر Uptodown
     </p>
-    <div class="flex items-center gap-5 text-[11px] text-slate-500 font-bold">
+    <div class="flex items-center gap-5 text-[11px] text-slate-500 font-bold flex-wrap justify-center">
       <span class="flex items-center gap-1.5"><i class="fa-solid fa-shield-virus text-emerald-400"></i> مفحوص بالفيروسات</span>
       <span class="flex items-center gap-1.5"><i class="fa-solid fa-code-slash text-fuchsia-400"></i> بدون سكربتات</span>
       <span class="flex items-center gap-1.5"><i class="fa-solid fa-scale-balanced text-amber-300"></i> ترخيص قانوني</span>
@@ -585,7 +599,7 @@ body{
 
 <script>
 /* =====================================================================
-   المدير الشامل — v5.1 (Uptodown + قسم الأوفيس + قائمة جانبية)
+   المدير الشامل — v5.2 (Uptodown + قسم الأوفيس + قائمة جانبية)
    لا سكربتات، لا PowerShell، لا CMD — روابط متجر وملفات رسمية فقط
 ===================================================================== */
 
@@ -639,7 +653,7 @@ const allPackages = [
   { id:'sdi-tool.SnappyDriverInstaller', name:'Snappy Driver Installer', category:'drivers', icon:'fa-solid fa-screwdriver-wrench', color:'text-amber-300', badge:'Offline', desc:'تثبيت حزمة تعاريف كاملة دون اتصال بالإنترنت', url:'https://snappy-driver-installer.en.uptodown.com/windows', selected:true },
   { id:'CodecGuide.KLiteCodecPack', name:'K-Lite Codec Pack Mega', category:'drivers', icon:'fa-solid fa-photo-film', color:'text-cyan-300', desc:'حزمة الترميزات الكاملة لتشغيل جميع صيغ الفيديو والصوت', url:'https://k-lite-mega-codec-pack.en.uptodown.com/windows', selected:true },
 
-  // ---------- office (8) — قسم جديد ----------
+  // ---------- office (8) ----------
   { id:'Microsoft.Microsoft365', name:'Microsoft 365', category:'office', icon:'fa-solid fa-cloud', color:'text-sky-400', badge:'اشتراك رسمي', desc:'أوفيس السحابي — Word وExcel وPowerPoint بتحديثات دائمة و1TB تخزين', url:'https://www.microsoft.com/microsoft-365', selected:true },
   { id:'Microsoft.Office.2021', name:'Microsoft Office 2021', category:'office', icon:'fa-brands fa-microsoft', color:'text-blue-400', badge:'ترخيص دائم', desc:'أحدث نسخة بترخيص دائم — شراء مرة واحدة بدون اشتراك', url:'https://microsoft-office-2021.en.uptodown.com/windows', selected:true },
   { id:'Microsoft.Office.2019', name:'Microsoft Office 2019', category:'office', icon:'fa-brands fa-microsoft', color:'text-indigo-400', desc:'النسخة الكلاسيكية المستقرة مع كل التطبيقات الأساسية', url:'https://microsoft-office-2019.en.uptodown.com/windows', selected:true },
@@ -651,32 +665,55 @@ const allPackages = [
 ];
 
 // ===== SECTION: STATE =====
-let currentCategory   = 'all';
-let searchQuery       = '';
-let toastTimer        = null;
-let warpSpeed3D       = false;
-const downloadedIds   = new Set();
+let currentCategory = 'all';
+let searchQuery     = '';
+let toastTimer      = null;
+let warpTimer       = null;
+let warpSpeed3D     = false;
+let coreShapeIndex  = 0;
+const downloadedIds = new Set();
 
 const CAT_LABELS = { all:'الكل', general:'البرامج الأساسية', dev:'البرمجة', python:'بايثون', drivers:'التعاريف', office:'الأوفيس' };
 
 // ===== SECTION: HELPERS =====
 const $ = id => document.getElementById(id);
-function hostOf(url){ try { return new URL(url).hostname.replace(/^www\./,''); } catch(e){ return 'uptodown.com'; } }
+
+function hostOf(url){
+  try { return new URL(url).hostname.replace(/^www\./,''); }
+  catch(e){ return 'uptodown.com'; }
+}
 function isUptodown(url){ return hostOf(url).includes('uptodown.com'); }
 function isDirectFile(url){ return /\.(exe|msi|zip)([?#]|$)/i.test(url) && !isUptodown(url); }
+
+// تطبيع عربي للبحث
+function normalizeArabic(str){
+  if (!str) return '';
+  return String(str)
+    .toLowerCase()
+    .replace(/[أإآ]/g, 'ا')
+    .replace(/ة/g, 'ه')
+    .replace(/ى/g, 'ي')
+    .replace(/[\u064B-\u0652]/g, '');
+}
 
 // ===== SECTION: TOAST =====
 function showToast(message, type){
   type = type || 'ok';
   const toast = $('toast'), icon = $('toast-icon'), msg = $('toast-msg');
+  if (!toast) return;
+
   const conf = {
     ok:   { cls:'fa-solid fa-circle-check text-emerald-400 text-xl shrink-0', border:'border-emerald-400/30' },
     warn: { cls:'fa-solid fa-triangle-exclamation text-amber-300 text-xl shrink-0', border:'border-amber-400/30' },
     info: { cls:'fa-solid fa-circle-info text-cyan-300 text-xl shrink-0', border:'border-cyan-400/30' }
-  }[type];
+  }[type] || { cls:'fa-solid fa-circle-check text-emerald-400 text-xl shrink-0', border:'border-emerald-400/30' };
+
   icon.className = conf.cls;
-  toast.firstElementChild.classList.remove('border-emerald-400/30','border-amber-400/30','border-cyan-400/30');
-  toast.firstElementChild.classList.add(conf.border);
+  const panel = toast.firstElementChild;
+  if (panel){
+    panel.classList.remove('border-emerald-400/30','border-amber-400/30','border-cyan-400/30');
+    panel.classList.add(conf.border);
+  }
   msg.textContent = message;
   toast.classList.remove('opacity-0','translate-y-5');
   if (toastTimer) clearTimeout(toastTimer);
@@ -686,21 +723,28 @@ function showToast(message, type){
 // ===== SECTION: LOG =====
 function addLog(tag, msg, color){
   const log = $('sim-log');
+  if (!log) return;
+
   const span = document.createElement('span');
-  const col = color==='amber' ? 'text-amber-300' : color==='green' ? 'text-emerald-300' : color==='fuchsia' ? 'text-fuchsia-300' : 'text-cyan-300';
+  const col = color==='amber'   ? 'text-amber-300'
+            : color==='green'   ? 'text-emerald-300'
+            : color==='fuchsia' ? 'text-fuchsia-300'
+            : 'text-cyan-300';
   span.className = col;
-  span.textContent = '['+tag+'] '+msg;
+  span.textContent = '[' + tag + '] ' + msg;
   log.appendChild(span);
   log.appendChild(document.createTextNode('\n'));
-  let guard = 0;
-  while (log.textContent.split('\n').length > 60 && guard++ < 80){
-    if (log.firstChild) log.removeChild(log.firstChild); else break;
+
+  // حذف الأسطر القديمة بأمان (كل سطر = span + text node)
+  while (log.childNodes.length > 120){
+    log.removeChild(log.firstChild);
   }
   log.scrollTop = log.scrollHeight;
 }
 
 // ===== SECTION: التحميل عبر Uptodown =====
 function triggerRealDownload(pkg){
+  if (!pkg || !pkg.url) return;
   const url = pkg.url;
   if (isDirectFile(url)){
     const a = document.createElement('a');
@@ -717,8 +761,8 @@ function triggerRealDownload(pkg){
 
 function markDownloaded(pkg){
   downloadedIds.add(pkg.id);
-  $('stat-downloaded').textContent = downloadedIds.size;
-  const so = $('side-opened'); if (so) so.textContent = downloadedIds.size;
+  const sd = $('stat-downloaded'); if (sd) sd.textContent = downloadedIds.size;
+  const so = $('side-opened');     if (so) so.textContent = downloadedIds.size;
 }
 
 function downloadPackage(pkg, cardEl){
@@ -746,16 +790,18 @@ function bulkDownload(list, label){
   start3DSimulation(2500);
   showToast('سيتم فتح ' + list.length + ' صفحة تحميل (' + label + ') — اسمح بالنوافذ المنبثقة إن طُلب', 'info');
   addLog('BULK', 'Batch started: ' + list.length + ' packages (' + label + ')', 'cyan');
-  let i = 0;
-  list.forEach(pkg => {
+
+  // إصلاح: استخدام idx الثابت بدل i المتغير
+  list.forEach((pkg, idx) => {
     setTimeout(() => {
       triggerRealDownload(pkg);
       markDownloaded(pkg);
-      addLog(isUptodown(pkg.url) ? 'OPEN' : 'DL', (++i) + '. ' + pkg.name, 'green');
-    }, i * 800);
+      addLog(isUptodown(pkg.url) ? 'OPEN' : 'DL', (idx + 1) + '. ' + pkg.name, 'green');
+    }, idx * 800);
   });
+
   setTimeout(() => {
-    addLog('DONE', 'Batch finished. ' + i + ' download pages opened.', 'green');
+    addLog('DONE', 'Batch finished. ' + list.length + ' download pages opened.', 'green');
   }, list.length * 800 + 600);
 }
 
@@ -776,12 +822,14 @@ function sourceChip(url){
 }
 
 function getVisiblePackages(){
-  const q = searchQuery;
+  const q = normalizeArabic(searchQuery);
   return allPackages.filter(p => {
-    const inCat = currentCategory==='all' || p.category===currentCategory;
+    const inCat = currentCategory === 'all' || p.category === currentCategory;
     if (!inCat) return false;
     if (!q) return true;
-    return p.name.toLowerCase().includes(q) || p.id.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q);
+    return normalizeArabic(p.name).includes(q)
+        || normalizeArabic(p.id).includes(q)
+        || normalizeArabic(p.desc).includes(q);
   });
 }
 
@@ -821,15 +869,19 @@ function attachTilt(card){
 
 function renderCards(){
   const grid = $('cards-grid');
+  if (!grid) return;
   const y = window.scrollY;
   const list = getVisiblePackages();
-  $('grid-count').textContent = 'عرض ' + list.length + ' من ' + allPackages.length + ' حزمة';
+  const gc = $('grid-count');
+  if (gc) gc.textContent = 'عرض ' + list.length + ' من ' + allPackages.length + ' حزمة';
+
   if (!list.length){
     grid.innerHTML = '<div class="col-span-full glass-card rounded-2xl p-12 text-center">'
       + '<i class="fa-solid fa-magnifying-glass text-3xl text-slate-600 mb-3"></i>'
       + '<p class="font-bold text-slate-400">لا توجد نتائج مطابقة — جرّب كلمة بحث أخرى</p></div>';
   } else {
-    grid.innerHTML = list.map(cardHTML).join('');
+    // إصلاح: تمرير الفهرس بأمان
+    grid.innerHTML = list.map((p, i) => cardHTML(p, i)).join('');
     grid.querySelectorAll('.pkg-card').forEach(card => {
       const id = card.getAttribute('data-id');
       card.addEventListener('click', function(e){
@@ -844,8 +896,9 @@ function renderCards(){
 
 function updateSingleCard(id){
   const card = document.querySelector('.pkg-card[data-id="'+id+'"]');
-  const pkg  = allPackages.find(p => p.id===id);
+  const pkg  = allPackages.find(p => p.id === id);
   if (!card || !pkg) return;
+
   card.className = buildCardClasses(pkg.selected);
   const slot = card.querySelector('.check-slot');
   if (slot) slot.innerHTML = buildCheckIcon(pkg.selected);
@@ -856,23 +909,28 @@ function updateSingleCard(id){
   }
 }
 
+// إصلاح: النقر على البطاقة = تحديد/إلغاء تحديد فقط (لا يفتح تحميلاً)
 function handleCardClick(pkgId, cardEl){
-  const pkg = allPackages.find(p => p.id===pkgId);
+  const pkg = allPackages.find(p => p.id === pkgId);
   if (!pkg) return;
   pkg.selected = !pkg.selected;
   updateSingleCard(pkgId);
   refreshQueueAndStats();
+
   if (pkg.selected){
-    downloadPackage(pkg, cardEl);
+    showToast('أُضيف ' + pkg.name + ' إلى قائمة التحميل');
+    addLog('SELECT', 'Added to queue: ' + pkg.name, 'green');
   } else {
-    showToast('تم إلغاء تحديد ' + pkg.name, 'info');
+    showToast('أُلغي تحديد ' + pkg.name, 'info');
     addLog('SELECT', 'Removed from queue: ' + pkg.name, 'amber');
   }
+  // ملاحظة: فتح صفحة التحميل يتم من زر التحميل في القائمة أو "تحميل الكل"
 }
 
 // ===== SECTION: رقائق قسم الأوفيس =====
 function renderOfficeChips(){
   const wrap = $('office-chips');
+  if (!wrap) return;
   const officePkgs = allPackages.filter(p => p.category === 'office');
   wrap.innerHTML = officePkgs.map(p =>
       '<button type="button" class="office-chip glass-card rounded-xl px-3.5 py-3 flex items-center gap-3 text-start cursor-pointer" data-id="'+p.id+'">'
@@ -884,6 +942,7 @@ function renderOfficeChips(){
     +   '<i class="fa-solid fa-arrow-up-right-from-square text-slate-500 text-xs shrink-0"></i>'
     + '</button>'
   ).join('');
+
   wrap.querySelectorAll('.office-chip').forEach(chip => {
     chip.addEventListener('click', function(e){
       e.preventDefault();
@@ -910,22 +969,32 @@ function queueRowHTML(p){
 function renderQueue(){
   const sel = allPackages.filter(p => p.selected);
   const box = $('queue-list');
-  $('queue-count').textContent = sel.length + ' برنامج';
+  if (!box) return;
+
+  const qc = $('queue-count');
+  if (qc) qc.textContent = sel.length + ' برنامج';
+
   if (!sel.length){
     box.innerHTML = '<div class="text-center py-14">'
       + '<i class="fa-solid fa-inbox text-3xl text-slate-600 mb-3"></i>'
       + '<p class="font-bold text-slate-400 text-sm">القائمة فارغة — انقر على البطاقات لإضافة برامجك</p></div>';
     return;
   }
+
   box.innerHTML = sel.map(queueRowHTML).join('');
   box.querySelectorAll('.q-row').forEach(row => {
-    const id = row.getAttribute('data-id');
-    const pkg = allPackages.find(p => p.id===id);
-    row.querySelector('.q-dl').addEventListener('click', function(e){
+    const id  = row.getAttribute('data-id');
+    const pkg = allPackages.find(p => p.id === id);
+    if (!pkg) return;
+
+    const dlBtn  = row.querySelector('.q-dl');
+    const delBtn = row.querySelector('.q-del');
+
+    if (dlBtn) dlBtn.addEventListener('click', function(e){
       e.preventDefault(); e.stopPropagation();
       downloadPackage(pkg, null);
     });
-    row.querySelector('.q-del').addEventListener('click', function(e){
+    if (delBtn) delBtn.addEventListener('click', function(e){
       e.preventDefault(); e.stopPropagation();
       pkg.selected = false;
       updateSingleCard(id);
@@ -938,8 +1007,8 @@ function renderQueue(){
 
 function refreshQueueAndStats(){
   const sel = allPackages.filter(p => p.selected);
-  $('stat-selected').textContent = sel.length + ' / ' + allPackages.length;
-  const ss = $('side-selected'); if (ss) ss.textContent = sel.length;
+  const ss = $('stat-selected'); if (ss) ss.textContent = sel.length + ' / ' + allPackages.length;
+  const side = $('side-selected'); if (side) side.textContent = sel.length;
   renderQueue();
 }
 
@@ -974,14 +1043,17 @@ function copyAllLinks(){
   const sel = allPackages.filter(p => p.selected);
   if (!sel.length){ showToast('لم يتم تحديد أي برنامج', 'warn'); return; }
   const txt = sel.map(p => p.name + '  ->  ' + p.url).join('\n');
-  const done = () => { showToast('تم نسخ ' + sel.length + ' رابطاً إلى الحافظة'); addLog('CLIP', sel.length + ' links copied', 'cyan'); };
+  const done = () => {
+    showToast('تم نسخ ' + sel.length + ' رابطاً إلى الحافظة');
+    addLog('CLIP', sel.length + ' links copied', 'cyan');
+  };
   if (navigator.clipboard && window.isSecureContext){
     navigator.clipboard.writeText(txt).then(done).catch(()=>{ fallbackCopy(txt); done(); });
   } else { fallbackCopy(txt); done(); }
 }
 function fallbackCopy(txt){
   const ta = document.createElement('textarea');
-  ta.value = txt; ta.style.position='fixed'; ta.style.opacity='0';
+  ta.value = txt; ta.style.position = 'fixed'; ta.style.opacity = '0';
   document.body.appendChild(ta); ta.select();
   try { document.execCommand('copy'); } catch(e){}
   document.body.removeChild(ta);
@@ -990,9 +1062,12 @@ function fallbackCopy(txt){
 // ===== SECTION: القائمة الجانبية =====
 function closeSidebarOnMobile(){
   if (window.innerWidth >= 1024) return;
-  $('sidebar').classList.remove('open');
-  $('side-overlay').classList.add('hidden');
-  $('side-toggle-icon').className = 'fa-solid fa-bars';
+  const sb = $('sidebar');
+  const ov = $('side-overlay');
+  const ic = $('side-toggle-icon');
+  if (sb) sb.classList.remove('open');
+  if (ov) ov.classList.add('hidden');
+  if (ic) ic.className = 'fa-solid fa-bars';
 }
 function scrollToSection(id){
   const el = $(id);
@@ -1000,15 +1075,15 @@ function scrollToSection(id){
 }
 function setActiveSideLink(btn){
   document.querySelectorAll('#side-nav .side-link').forEach(l => l.classList.remove('active'));
-  btn.classList.add('active');
+  if (btn) btn.classList.add('active');
 }
 
 // =====================================================================
-// SECTION: THREE.JS SCENE
+// SECTION: THREE.JS SCENE (مع حماية من فشل CDN)
 // =====================================================================
 let scene, camera, renderer, coreMesh, outerRing, particlesMesh;
 let mouseX = 0, mouseY = 0;
-let coreShapeIndex = 0;
+
 const CORE_SHAPES = [
   { name:'العشروني Icosahedron',      make:() => new THREE.IcosahedronGeometry(7.5, 1) },
   { name:'العقدة الحلقية Torus Knot', make:() => new THREE.TorusKnotGeometry(5.4, 1.35, 220, 24) },
@@ -1016,81 +1091,97 @@ const CORE_SHAPES = [
 ];
 
 function initThreeJS(){
-  const canvas = $('bg-canvas');
-  scene = new THREE.Scene();
-  camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 300);
-  camera.position.z = 26;
+  if (typeof THREE === 'undefined'){
+    console.warn('[3D] Three.js not loaded — skipping background scene.');
+    return;
+  }
+  try {
+    const canvas = $('bg-canvas');
+    if (!canvas) return;
 
-  renderer = new THREE.WebGLRenderer({ canvas:canvas, alpha:true, antialias:true });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  renderer.setSize(window.innerWidth, window.innerHeight);
+    scene = new THREE.Scene();
+    camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 300);
+    camera.position.z = 26;
 
-  coreMesh = new THREE.Mesh(
-    CORE_SHAPES[0].make(),
-    new THREE.MeshBasicMaterial({ color:0x22d3ee, wireframe:true, transparent:true, opacity:0.22 })
-  );
-  scene.add(coreMesh);
-
-  outerRing = new THREE.Mesh(
-    new THREE.TorusGeometry(12.5, 0.08, 16, 100),
-    new THREE.MeshBasicMaterial({ color:0xd946ef, transparent:true, opacity:0.35 })
-  );
-  outerRing.rotation.x = Math.PI / 2.6;
-  scene.add(outerRing);
-
-  const positions = new Float32Array(900 * 3);
-  for (let i=0; i<positions.length; i++) positions[i] = (Math.random() - 0.5) * 75;
-  const pGeo = new THREE.BufferGeometry();
-  pGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-  particlesMesh = new THREE.Points(pGeo, new THREE.PointsMaterial({ color:0x67e8f9, size:0.07, transparent:true, opacity:0.55 }));
-  scene.add(particlesMesh);
-
-  window.addEventListener('mousemove', function(e){
-    mouseX =  (e.clientX / window.innerWidth)  * 2 - 1;
-    mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
-  });
-  window.addEventListener('resize', function(){
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
+    renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setSize(window.innerWidth, window.innerHeight);
-  });
 
-  animate3D();
+    coreMesh = new THREE.Mesh(
+      CORE_SHAPES[0].make(),
+      new THREE.MeshBasicMaterial({ color: 0x22d3ee, wireframe: true, transparent: true, opacity: 0.22 })
+    );
+    scene.add(coreMesh);
+
+    outerRing = new THREE.Mesh(
+      new THREE.TorusGeometry(12.5, 0.08, 16, 100),
+      new THREE.MeshBasicMaterial({ color: 0xd946ef, transparent: true, opacity: 0.35 })
+    );
+    outerRing.rotation.x = Math.PI / 2.6;
+    scene.add(outerRing);
+
+    const positions = new Float32Array(900 * 3);
+    for (let i = 0; i < positions.length; i++) positions[i] = (Math.random() - 0.5) * 75;
+    const pGeo = new THREE.BufferGeometry();
+    pGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    particlesMesh = new THREE.Points(pGeo, new THREE.PointsMaterial({ color: 0x67e8f9, size: 0.07, transparent: true, opacity: 0.55 }));
+    scene.add(particlesMesh);
+
+    window.addEventListener('mousemove', function(e){
+      mouseX =  (e.clientX / window.innerWidth)  * 2 - 1;
+      mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+    });
+    window.addEventListener('resize', function(){
+      if (!camera || !renderer) return;
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    animate3D();
+  } catch(err){
+    console.error('[3D] Failed to init:', err);
+  }
 }
 
 function animate3D(){
+  if (!renderer || !scene || !camera) return;
   requestAnimationFrame(animate3D);
   const f = warpSpeed3D ? 5.5 : 1;
-  coreMesh.rotation.y += 0.0018 * f;
-  coreMesh.rotation.x += 0.0006 * f;
-  outerRing.rotation.z += 0.0012 * f;
-  outerRing.rotation.y += 0.0004 * f;
-  particlesMesh.rotation.y += 0.00035 * f;
-  particlesMesh.rotation.x += 0.00012 * f;
+  if (coreMesh){
+    coreMesh.rotation.y += 0.0018 * f;
+    coreMesh.rotation.x += 0.0006 * f;
+  }
+  if (outerRing){
+    outerRing.rotation.z += 0.0012 * f;
+    outerRing.rotation.y += 0.0004 * f;
+  }
+  if (particlesMesh){
+    particlesMesh.rotation.y += 0.00035 * f;
+    particlesMesh.rotation.x += 0.00012 * f;
+  }
   camera.position.x += (mouseX * 3.2 - camera.position.x) * 0.05;
   camera.position.y += (-mouseY * 2.2 - camera.position.y) * 0.05;
   camera.lookAt(scene.position);
   renderer.render(scene, camera);
 }
 
-function update3DCoreColor(hexColor){
-  if (coreMesh)  coreMesh.material.color.set(hexColor);
-  if (outerRing) outerRing.material.color.set(hexColor);
-}
-
 function toggle3DWireframe(){
-  coreShapeIndex = (coreShapeIndex + 1) % CORE_SHAPES.length;
-  if (coreMesh){
-    coreMesh.geometry.dispose();
-    coreMesh.geometry = CORE_SHAPES[coreShapeIndex].make();
+  if (!coreMesh){
+    showToast('المشهد ثلاثي الأبعاد غير متاح حالياً', 'warn');
+    return;
   }
+  coreShapeIndex = (coreShapeIndex + 1) % CORE_SHAPES.length;
+  coreMesh.geometry.dispose();
+  coreMesh.geometry = CORE_SHAPES[coreShapeIndex].make();
   showToast('شكل النواة الجديد: ' + CORE_SHAPES[coreShapeIndex].name, 'info');
   addLog('3D', 'Core shape -> ' + CORE_SHAPES[coreShapeIndex].name, 'cyan');
 }
 
 function start3DSimulation(ms){
   warpSpeed3D = true;
-  setTimeout(()=>{ warpSpeed3D = false; }, ms || 2000);
+  if (warpTimer) clearTimeout(warpTimer);
+  warpTimer = setTimeout(()=>{ warpSpeed3D = false; warpTimer = null; }, ms || 2000);
 }
 
 // =====================================================================
@@ -1102,27 +1193,41 @@ document.addEventListener('DOMContentLoaded', function(){
   renderOfficeChips();
   refreshQueueAndStats();
 
+  // تبويبات التصنيف
   document.querySelectorAll('.cat-tab').forEach(tab => {
     tab.addEventListener('click', function(){ filterCategory(tab.dataset.cat); });
   });
 
-  $('search-input').addEventListener('input', function(e){
-    searchQuery = e.target.value.trim().toLowerCase();
-    renderCards();
-  });
+  // البحث
+  const searchInput = $('search-input');
+  if (searchInput){
+    searchInput.addEventListener('input', function(e){
+      searchQuery = e.target.value.trim();
+      renderCards();
+    });
+  }
 
-  $('invert-cat-btn').addEventListener('click', toggleCurrentCategorySelection);
+  // زر عكس تحديد القسم
+  const invertBtn = $('invert-cat-btn');
+  if (invertBtn) invertBtn.addEventListener('click', toggleCurrentCategorySelection);
 
-  $('download-all-btn').addEventListener('click', function(){
+  // أزرار التحميل الجماعي
+  const dlAll = $('download-all-btn');
+  if (dlAll) dlAll.addEventListener('click', function(){
     bulkDownload(allPackages.filter(p => p.selected), 'كل المحدد');
   });
-  $('download-cat-btn').addEventListener('click', function(){
+
+  const dlCat = $('download-cat-btn');
+  if (dlCat) dlCat.addEventListener('click', function(){
     bulkDownload(getVisiblePackages().filter(p => p.selected), CAT_LABELS[currentCategory]);
   });
-  $('copy-links-btn').addEventListener('click', copyAllLinks);
+
+  const copyBtn = $('copy-links-btn');
+  if (copyBtn) copyBtn.addEventListener('click', copyAllLinks);
 
   // زر عرض الأوفيس في الشبكة
-  $('office-browse-btn').addEventListener('click', function(){
+  const officeBtn = $('office-browse-btn');
+  if (officeBtn) officeBtn.addEventListener('click', function(){
     filterCategory('office');
     scrollToSection('apps');
     addLog('NAV', 'Filtered grid -> Office packages', 'cyan');
@@ -1132,12 +1237,12 @@ document.addEventListener('DOMContentLoaded', function(){
   document.querySelectorAll('#side-nav .side-link[data-target]').forEach(btn => {
     btn.addEventListener('click', function(){
       setActiveSideLink(btn);
-      if (btn.dataset.target === 'office'){ /* قسم الأوفيس مستقل */ }
       scrollToSection(btn.dataset.target);
       closeSidebarOnMobile();
     });
   });
-  // روابط الأقسام السريعة في القائمة الجانبية (تفلتر الشبكة + تنزلج لها)
+
+  // روابط الأقسام السريعة
   document.querySelectorAll('#side-nav .side-cat').forEach(btn => {
     btn.addEventListener('click', function(){
       filterCategory(btn.dataset.cat);
@@ -1150,14 +1255,20 @@ document.addEventListener('DOMContentLoaded', function(){
   });
 
   // زر فتح/إغلاق القائمة الجانبية (موبايل)
-  $('side-toggle').addEventListener('click', function(){
+  const sideToggle = $('side-toggle');
+  if (sideToggle) sideToggle.addEventListener('click', function(){
     const sb = $('sidebar');
+    const ov = $('side-overlay');
+    const ic = $('side-toggle-icon');
+    if (!sb) return;
     const open = !sb.classList.contains('open');
     sb.classList.toggle('open', open);
-    $('side-overlay').classList.toggle('hidden', !open);
-    $('side-toggle-icon').className = open ? 'fa-solid fa-xmark' : 'fa-solid fa-bars';
+    if (ov) ov.classList.toggle('hidden', !open);
+    if (ic) ic.className = open ? 'fa-solid fa-xmark' : 'fa-solid fa-bars';
   });
-  $('side-overlay').addEventListener('click', closeSidebarOnMobile);
+
+  const overlay = $('side-overlay');
+  if (overlay) overlay.addEventListener('click', closeSidebarOnMobile);
 
   addLog('READY', 'Loaded ' + allPackages.length + ' packages - powered by Uptodown (Office suite included).', 'green');
 });
